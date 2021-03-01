@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.MemberMapper">
+    <select id="getAllMembers" resultType="members">
+        select * from project.members;
+    </select>
+    <select id="getOneMember" resultType="members">
+        select * from project.members where memno = #{id};
+    </select>
+
+    <insert id="addMember" parameterType="members">
+        insert into project.members(memacc,mempwd,memname,nkname,membday,memail,mphone,mprofile)
+                             values(#{memacc},#{mempwd},#{memname},#{nkname},#{membday},#{memail},#{mphone},#{mprofile})
+    </insert>
+    <update id="updateMember" parameterType="members">
+        update project.members
+        <set>
+            <if test="memacc != null">memacc = #{memacc},</if>
+            <if test="mempwd != null">mempwd = #{mempwd},</if>
+            <if test="memname != null">memname = #{memname},</if>
+            <if test="nkname != null">nkname = #{nkname},</if>
+            <if test="membday != null">membday = #{membday},</if>
+            <if test="memail != null">memail = #{memail},</if>
+            <if test="mphone != null">mphone = #{mphone},</if>
+            <if test="mprofile != null">mprofile = #{mprofile},</if>
+        </set>
+            where memno = #{memno}
+    </update>
+
+    <delete id="deleteMember" >
+        delete from project.members where memno = #{id}
+    </delete>
+
+    <select id="checkMemacc" resultType="int">
+        select count(*) from project.members where memacc = #{memacc}
+    </select>
+
+    <select id="checkMemail" resultType="int">
+        select count(*) from project.members where memail = #{memail}
+    </select>
+</mapper>
