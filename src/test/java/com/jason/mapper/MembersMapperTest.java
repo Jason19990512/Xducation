@@ -65,8 +65,9 @@ public class MembersMapperTest {
 
     @Test
     public void checkMemacc(){
-        int flag = memberMapper.checkMemacc("M00001");
-        if(flag > 0){
+        Members member = memberMapper.checkMemacc("M00001");
+        System.out.println(member);
+        if(member != null ){
             System.out.println("帳號已存在");
         }else{
             System.out.println("帳號可創立");

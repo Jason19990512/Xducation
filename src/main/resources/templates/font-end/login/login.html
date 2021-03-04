@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>登入</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="font-end/assets/js/jquery-min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{font-end/assets/css/bootstrap.min.css}">
     <!-- Icon -->
@@ -226,21 +227,40 @@
             text-decoration: underline;
         }
     </style>
+    <script>
+        $(document).ready(function(){
+
+        });
+        function loginSubmit(){
+            event.preventDefault();
+            $('#loginform').attr('method','post');
+            $('#loginform').attr('action','/login');
+            if($('#memacc').val().trim() === '' || $('#mempwd').val().trim() === ''){
+                return false;
+            }
+            $('#loginform').submit();
+        }
+
+    </script>
 </head>
 <body>
 <div th:insert="~{font-end/index/index::nav-header}"></div>
 <div class="container">
     <section id="content" style="margin: 200px auto">
-        <form action="">
+        <form id="loginform">
             <h1>Login Form</h1>
             <div>
-                <input type="text" placeholder="Account" required="" id="memacc" name="memacc"/>
+                <input type="text" placeholder="Account" th:value="${member == null? '': member.getMemacc()}"  required="" id="memacc" name="memacc" maxlength="20"/>
             </div>
             <div>
-                <input type="password" placeholder="Password" required="" id="mempwd" name="mempwd" />
+                <input type="password" placeholder="Password" th:value="${member == null? '': member.getMempwd()}" required="" id="mempwd" name="mempwd" maxlength="20"/>
             </div>
             <div>
-                <input type="submit" value="Log in" />
+                <label for="rememberMe"><input id="rememberMe" type="checkbox" name="rememberMe" /> RememberMe</label>
+                <span th:text="${msg}" style="color:red;"></span>
+            </div>
+            <div>
+                <input type="submit"  value="Log in" onclick="loginSubmit()"/>
                 <a href="#">Lost your password?</a>
                 <a href="#">Register</a>
             </div>

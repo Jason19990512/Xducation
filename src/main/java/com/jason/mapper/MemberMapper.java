@@ -20,7 +20,7 @@ public interface MemberMapper {
 
     int deleteMember(@Param("id")int id);
 
-    int checkMemacc(@Param("memacc")String memacc);
+    Members checkMemacc(@Param("memacc")String memacc);
 
     int checkMemail(@Param("memail")String memail);
 }

@@ -55,11 +55,16 @@
                                 名人講座&nbsp;<i class="lni-bulb"></i>
                             </a>
                         </li>
-                        <li class="nav-item">
+<!--                        <div th:if="${isLogin != true}">-->
+
+                        <li class="nav-item" th:if="${isLogin == null}">
                             <a class="nav-link" th:href="@{/toLogin}" >
                                 我要登入&nbsp;<i class="lni-home"></i>
                             </a>
                         </li>
+
+<!--                        </div>-->
+
                     </ul>
                 </div>
             </div>

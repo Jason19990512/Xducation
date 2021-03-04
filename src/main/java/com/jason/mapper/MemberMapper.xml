@@ -31,8 +31,8 @@
         delete from project.members where memno = #{id}
     </delete>
 
-    <select id="checkMemacc" resultType="int">
-        select count(*) from project.members where memacc = #{memacc}
+    <select id="checkMemacc" resultType="members">
+        select * from project.members where memacc = #{memacc}
     </select>
 
     <select id="checkMemail" resultType="int">
