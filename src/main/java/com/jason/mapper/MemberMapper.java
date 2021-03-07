@@ -14,13 +14,15 @@ public interface MemberMapper {
 
     Members getOneMember(@Param("id") int id);
 
-    int addMember(Members members);
+    Integer addMember(Members members);
 
-    int updateMember(Members members);
+    Integer updateMember(Members members);
 
-    int deleteMember(@Param("id")int id);
+    Integer deleteMember(@Param("id")int id);
 
-    Members checkMemacc(@Param("memacc")String memacc);
+    Members loginCheckMemacc(@Param("memacc")String memacc);
 
-    int checkMemail(@Param("memail")String memail);
+    Integer registerCheckMemacc(@Param("memacc")String memacc);
+
+    Integer registerCheckMemail(@Param("memail")String memail);
 }

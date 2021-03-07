@@ -1,0 +1,389 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Xducation-會員註冊</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.js"
+            type="text/javascript"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+    <!-- Icon -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
+    <!-- Owl carousel -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.theme.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/nivo-lightbox.css}">
+    <!-- Animate -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/animate.css}">
+    <!-- Main Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/main.css}">
+    <!-- Responsive Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
+    <!-- Main css -->
+    <link rel="stylesheet" th:href="@{/front-end/members/addMembers_css/style.css}">
+</head>
+
+<body>
+
+<div th:insert="~{front-end/index/index::nav-header}"></div>
+
+        <div class="main">
+            <!-- Sign up form -->
+            <section class="signup">
+                <div class="container" id="bg">
+
+                    <button type="button"  id="add">Magic BTN</button>
+
+                    <a th:href="@{/index}">
+                        <img id='preview_progressbarTW_img'
+                            th:src="@{/front-end/members/assets/img/head/01.png}"
+                            alt="sing up image">
+                    </a>
+
+                    <div class="signup-image">
+                        <a th:href="@{/toLogin}" class="signup-image-link" style="font-family: 'Gochi Hand';">
+                            I am already member
+                        </a>
+                    </a>
+
+                    </div>
+                    <div class="signup-content">
+                        <div class="signup-form">
+                            <h2 class="form-title">Sign up</h2>
+                            <h3 th:text="${registerMsg}" style="color:red";></h3>
+                            <form  class="register-form"  id="register-form" th:object="${member}">
+                                <input type="hidden" name="memno">
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/memacc.svg}">
+                                    <label for="memacc"></label>
+                                    <input th:value="${member == null? '' : member.getMemacc() }" id="memacc" type="text" name="memacc" class="input" onblur="checkMemaccRequest()" placeholder="Account" required  maxlength="20"/>
+                                    <span id="memaccMsg"></span>
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/password.svg}">
+                                    <label for="mempwd"></label>
+                                    <input style="font-family: 'Gochi Hand';" type="password"
+                                           th:value="${member == null? '' : member.getMempwd() }" id="mempwd" class="input" name="mempwd" onkeyup="checkPwdPattern()" onblur="checkPwdPattern()"
+                                           placeholder="Password" required maxlength="20" />
+                                    <span id="pwdMsg"></span>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/Rmempwd.svg}"><label
+                                        for="Rmempwd"></label>
+                                    <input type="password" id="Rmempwd"  class="input" th:value="${member == null? '' : member.getMempwd() }"
+                                           placeholder="Password again" required onblur="checkPwdAgain()" onkeyup="checkPwdAgain()"/>
+                                    <span id="rePwdMsg"></span>
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/id-card.svg}"
+                                         alt=""> <label for="memname"></label>
+                                    <input type="text" id="memname"
+                                           value="" class="input" th:value="${member == null? '' : member.getMemname() }"
+                                           name="memname" placeholder="Your Name" required/>
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/nickname.svg}"
+                                         alt=""> <label for="nkname"></label>
+                                    <input type="text" id="nkname"
+                                           value="" class="input" required th:value="${member == null? '' : member.getNkname() }"
+                                           name="nkname" placeholder="Your Nickname" />
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/iphone.svg}"
+                                         alt=""> <label for="mphone"></label>
+                                    <input type="tel" id="mphone"  style="width: 54%;"
+                                           value="" class= pattern="09[0-9]{2}-[0-9]{3}-[0-9]{3}" th:value="${member == null? '' : member.getMphone() }"
+                                           name="mphone" placeholder="EX: 0912-345-789" required/>
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/new-email.svg}"
+                                         alt=""> <label for="memail"></label>
+                                    <input type="email" id="memail" th:value="${member == null? '' : member.getMemail() }"
+                                           class="input" name="memail" onblur="registerCheckMemail()" onkeyup="registerCheckMemail()"
+                                           placeholder="Your Email" required />
+                                    <span id = "memailMsg"></span>
+                                </div>
+                                <div class="form-group">
+                                    <img class="icon1"
+                                         th:src="@{/front-end/members/signIn&updateMembers_css/images/birthday-present.svg}" th:value="${member == null? '' : member.getMembday() }"
+                                         alt=""> <input type="text" name="membday" value="" class="input" id="f_date1" placeholder="Your Birthday" />
+                                </div>
+
+                                <div class="form-group">
+                                    <div style="height: 50px;">
+                                        <img class="icon1"
+                                             th:src="@{/front-end/members/signIn&updateMembers_css/images/pictures.svg}">
+                                    </div>
+                                    <label for="file"
+                                           style="font-family: 'Gochi Hand'; font-size: 30px; font-family: 'Gochi Hand'; margin-left: 40px;">點選上傳會員頭像
+
+                                        <input onchange="readURL(this)" targetID="preview_progressbarTW_img" type="file"
+                                               name="file" style="display: none;" id="file" />
+                                    </label>
+                                </div>
+                                    <input type="hidden" name="regdate" id="regdate">
+                                    <input type="hidden" name="memdelete" value="0">
+                                    <input type="hidden" name="mprofile" id="mprofile" th:value="${member == null? '' : member.getMprofile() }">
+                                <div class="form-group form-button">
+                                    <button class="btn btn-primary" onclick="submitSignup()">Sign up</button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </section>
+
+
+        </div>
+</body>
+
+<link rel="stylesheet" type="text/css"
+      th:href="@{/front-end/members/datepicker/jquery.datetimepicker.css}" />
+<script
+        th:src="@{/front-end/members/datepicker/jquery.js}"></script>
+<script
+        th:src="@{/front-end/members/datepicker/jquery.datetimepicker.full.js}"></script>
+
+<style>
+    .xdsoft_datetimepicker .xdsoft_datepicker {
+        width: 300px; /* width:  300px; */
+    }
+
+    .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
+        height: 151px; /* height:  151px; */
+    }
+</style>
+
+<script type="text/javascript">
+
+    $("#add").click(function(e){
+        e.preventDefault();
+        $("#memacc").val("M00031");
+        $("#mempwd").val("123456");
+        $("#Rmempwd").val("123456");
+        $("#memname").val("吳彼得");
+        $("#nkname").val("Peter");
+        $("#mphone").val("0987323020");
+        $("#memail").val("scobboy0121@gmail.com");
+        $("#f_date1").val("1991-11-12");
+    })
+
+    function readURL(input){
+
+        if(input.files && input.files[0]){
+            //將檔名放進去
+            $('#mprofile').val(input.files[0].name);
+            var imageTagID = input.getAttribute("targetID");
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                var img = document.getElementById(imageTagID);
+
+                img.setAttribute("src", e.target.result)
+
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+
+
+    $.datetimepicker.setLocale('zh');
+    $('#f_date1').datetimepicker({
+        theme: '',              //theme: 'dark',
+        timepicker:false,       //timepicker:true,
+        step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
+        format:'Y-m-d',         //format:'Y-m-d H:i:s',
+        value: '<%=membday%>',   // value:   new Date(),
+        //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
+        //startDate:             '2017/07/10',  // 起始日
+        //minDate:               '-1970-01-01', // 去除今日(不含)之前
+        //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
+    });
+
+    $('#regdate').val($('#f_date1').val());
+
+
+    // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
+
+    //      1.以下為某一天之前的日期無法選擇
+    // var somedate1 = new Date('1920-01-01');
+    // $('#f_date1').datetimepicker({
+    //     beforeShowDay: function(date) {
+    //         if (  date.getYear() <  somedate1.getYear() ||
+    //             (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) ||
+    //             (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
+    //         ) {
+    //             return [false, ""]
+    //         }
+    //         return [true, ""];
+    //     }});
+
+
+    //2.以下為某一天之後的日期無法選擇
+    var somedate2 = new Date(new Date());
+    $('#f_date1').datetimepicker({
+        beforeShowDay: function(date) {
+            if (  date.getYear() >  somedate2.getYear() ||
+                (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) ||
+                (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
+            ) {
+                return [false, ""]
+            }
+            return [true, ""];
+        }});
+
+
+    //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
+    //      var somedate1 = new Date('2017-06-15');
+    //      var somedate2 = new Date('2017-06-25');
+    //      $('#f_date1').datetimepicker({
+    //          beforeShowDay: function(date) {
+    //            if (  date.getYear() <  somedate1.getYear() ||
+    //                 (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) ||
+    //                 (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
+    //                   ||
+    //                  date.getYear() >  somedate2.getYear() ||
+    //                 (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) ||
+    //                 (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
+    //              ) {
+    //                   return [false, ""]
+    //              }
+    //              return [true, ""];
+    //      }});
+
+    //確認帳號是否被註冊
+    function checkMemaccRequest(){
+        var memacc = $("#memacc").val();
+        if(memacc == null || memacc.trim().length == 0) {
+            $('#memaccMsg').text('帳號長度不可為空');
+            $('#memaccMsg').css('color','red');
+            $('#signup').prop('disabled',true);
+            return false;
+        }else if(memacc.trim().length > 20){
+            $('#memaccMsg').text('帳號長度不可大於20');
+            $('#memaccMsg').css('color','red');
+            $('#signup').prop('disabled',true);
+            return false;
+        }else{
+            $('#memaccMsg').text('');
+            $.ajax({
+                type:'POST',
+                url:'/register/registerCheckMemacc',
+                data:{'memacc':memacc.trim()},
+                success:function (data){
+                    if(data === 'true'){
+                        $('#memaccMsg').text('此會員帳號可註冊');
+                        $('#memaccMsg').css('color','green');
+                        $('#signup').prop('disabled',false);
+                    }else{
+                        $('#memaccMsg').text('此會員帳號已被註冊');
+                        $('#memaccMsg').css('color','red');
+                        $('#signup').prop('disabled',true);
+                    }
+                }
+            });
+        }
+    }
+
+    function checkPwdPattern(){
+        var pwd = $('#mempwd').val();
+        var pwdMsg = $('#pwdMsg')
+        var re = new RegExp('[a-zA-Z0-9]{8,20}');
+        var isFitPattern = re.test(pwd);
+        if(!isFitPattern){
+            pwdMsg.text("密碼請輸入8~20位英文或數字");
+            pwdMsg.css("color",'red');
+            $('#signup').prop('disabled',true);
+        }else {
+            pwdMsg.text("密碼OK");
+            pwdMsg.css("color",'green');
+            $('#signup').prop('disabled',false);
+        }
+    }
+    function checkPwdAgain(){
+        var pwd = $('#mempwd').val();
+        var rePwd = $('#Rmempwd').val();
+        var rePwdMsg = $('#rePwdMsg');
+        if(pwd === rePwd && pwd != null && pwd.trim().length != 0 ){
+            rePwdMsg.css('color','green');
+            rePwdMsg.text('密碼OK');
+            $('#signup').prop('disabled',false);
+        }else{
+            rePwdMsg.css('color','red');
+            rePwdMsg.text('密碼輸入不一致');
+            $('#signup').prop('disabled',true);
+        }
+
+    }
+
+    function registerCheckMemail(){
+       var memail = $('#memail').val();
+       if(memail == null || memail.trim().length == 0){
+           $('#memailMsg').text('電子信箱不可為空');
+           $('#memailMsg').css('color','red');
+           $('#signup').prop('disabled',true);
+       }else if(memail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/)){
+           $('#memailMsg').text('必須符合電子郵件格式');
+           $('#memailMsg').css('color','red');
+           $('#signup').prop('disabled',true);
+       }else{
+           $.ajax({
+               type: 'POST',
+               url:'/register/registerCheckMemail',
+               data:{'memail':memail},
+               success:function (data){
+                   if(data){
+                       $('#memailMsg').text('此電子信箱尚未被使用');
+                       $('#memailMsg').css('color','green');
+                       $('#signup').prop('disabled',false);
+                   }else{
+                       $('#memailMsg').text('此電子信箱已被使用');
+                       $('#memailMsg').css('color','red');
+                       $('#signup').prop('disabled',true);
+                   }
+               }
+           });
+       }
+    }
+
+    function submitSignup(){
+        checkMemaccRequest();
+        registerCheckMemail();
+        var myForm = $('#register-form');
+        myForm.attr('method','POST');
+        myForm.attr('enctype','multipart/form-data');
+        myForm.attr('action','/register/addMembers');
+        myForm.submit();
+    }
+
+</script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+</html>

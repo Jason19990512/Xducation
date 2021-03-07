@@ -64,8 +64,8 @@ public class MembersMapperTest {
     }
 
     @Test
-    public void checkMemacc(){
-        Members member = memberMapper.checkMemacc("M00001");
+    public void loginCheckMemacc(){
+        Members member = memberMapper.loginCheckMemacc("M00001");
         System.out.println(member);
         if(member != null ){
             System.out.println("帳號已存在");
@@ -75,8 +75,18 @@ public class MembersMapperTest {
     }
 
     @Test
-    public void checkMemail(){
-        int flag = memberMapper.checkMemail("jpg1234@gmail.com");
+    public void registerCheckMemacc(){
+        int flag = memberMapper.registerCheckMemacc("M00001");
+        if(flag > 0){
+            System.out.println("帳號已存在");
+        }else{
+            System.out.println("帳號可創立");
+        }
+    }
+
+    @Test
+    public void registerCheckMemail(){
+        int flag = memberMapper.registerCheckMemail("jpg1234@gmail.com");
         if(flag > 0){
             System.out.println("信箱已使用");
         }else{

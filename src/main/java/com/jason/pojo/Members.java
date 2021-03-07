@@ -3,6 +3,7 @@ package com.jason.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.*;
 @Data
@@ -17,7 +18,7 @@ public class Members {
     private Date membday;
     private String memail;
     private String mphone;
-    private byte[] mprofile;
-    private Timestamp regdate;
+    private String mprofile;
+    private String regdate;
     private Integer memdelete;
 }
