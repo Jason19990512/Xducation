@@ -21,4 +21,5 @@ public class Members {
     private String mprofile;
     private String regdate;
     private Integer memdelete;
+    private String roleList;
 }

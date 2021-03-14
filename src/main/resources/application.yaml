@@ -1,9 +1,25 @@
+#datasource
 spring:
   datasource:
     username: root
     password: 123456
     url: jdbc:mysql://localhost:3306/project?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jpg74569@gmail.com
+    password: aa27272412
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
+#thymeleaf
+thymeleaf: cache=false
 
 #整合mybatis
 mybatis.type-aliases-package: com.jason.pojo
+
+

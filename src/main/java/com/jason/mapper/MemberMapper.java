@@ -12,7 +12,9 @@ import java.util.List;
 public interface MemberMapper {
     List<Members> getAllMembers();
 
-    Members getOneMember(@Param("id") int id);
+    Members getOneMemberById(@Param("id") int id);
+
+    Members getOneMemberByMememail(@Param("memail") String memail);
 
     Integer addMember(Members members);
 

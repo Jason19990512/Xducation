@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>重新設定密碼</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+    <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+    <!-- Icon -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
+    <!-- Owl carousel -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.theme.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/nivo-lightbox.css}">
+    <!-- Animate -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/animate.css}">
+    <!-- Main Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/main.css}">
+    <!-- Responsive Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" th:href="@{/front-end/login/css/editNewPwd.css}">
+    <script>
+        function change(event,type) {
+            event.preventDefault();
+            var x = document.getElementById(type);
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+        function resetSubmit(event){
+            event.preventDefault();
+            var mempwd   = $('#mempwd').val();
+            var remempwd = $('#remempwd').val();
+            if(mempwd != remempwd){
+                alert('密碼不一致!!!');
+            }else{
+                var resetForm = $('#resetForm');
+                resetForm.attr('method','POST');
+                resetForm.attr('action','/register/saveResetPwd');
+                resetForm.submit();
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <div th:insert="~{front-end/index/index::nav-header}"></div>
+    <div class="formulaire">
+        <form id="resetForm" method="post">
+            <div class="yourname">
+                <label for="memail">Your Email</label>
+                <input type="text" name="memail" id="memail" class="memail" th:value="${memail}" readonly>
+            </div>
+            <div class="password">
+                <label for="mempwd">Enter Your Password</label>
+                <input type="password" name="mempwd" id="mempwd" class="mempwd">
+                <div class="btn_change">
+                    <button onclick="change(event,'mempwd');">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="rePassword">
+                <label for="mempwd">Check Password Again</label>
+                <input type="password" name="remempwd" id="remempwd" class="mempwd">
+                <div class="btn_change">
+                    <button onclick="change(event,'remempwd');">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="submit">
+                <button type="submit" class="btn_sub" onclick="resetSubmit(event);">Reset password</button>
+                <div style="clear:both"></div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

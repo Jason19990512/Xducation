@@ -5,7 +5,7 @@
     <title>登入</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
-    <!-- Bootstrap CSS -->
+    <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>    <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
     <!-- Icon -->
     <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
@@ -26,6 +26,36 @@
     <script>
         $(document).ready(function(){
 
+            $('body').on('click','.btn-primary',function(){
+
+               var memail = $('#memail').val();
+               if(memail != undefined && memail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/) != -1 ){
+                   var request = $.ajax({
+                                    type:'POST',
+                                    url:'/register/registerCheckMemail',
+                                    data:{'memail': memail}
+                   });
+                   request.done(function (data){
+                       if(data ==='true'){
+                           $('#emailMsg').text('此信箱無註冊帳號，請重新輸入');
+                           $('#emailMsg').css('color','red');
+                       }else{
+                           $('#emailMsg').text('');
+                           var request = $.ajax({
+                               type:'POST',
+                               url:'/register/getBackPwd',
+                               data:{'memail': memail}
+                           });
+                           request.done(function (data){
+                               if(data){
+                                   $('#getLostPwd').modal('toggle');
+                                    alert('請去信箱重設密碼');
+                               }
+                           });
+                       }
+                   });
+               }
+            });
         });
         function loginSubmit(){
             event.preventDefault();
@@ -36,6 +66,12 @@
             }
             $('#loginform').submit();
         }
+
+        function getBackLost(){
+            event.preventDefault();
+            $('#getLostPwd').modal('toggle');
+        }
+
 
     </script>
 </head>
@@ -52,17 +88,40 @@
                 <input type="password" placeholder="Password" th:value="${member == null? '': member.getMempwd()}" required="" id="mempwd" name="mempwd" maxlength="20"/>
             </div>
             <div>
-                <label for="rememberMe"><input id="rememberMe" type="checkbox" name="rememberMe" /> RememberMe</label>
                 <span th:text="${msg}" style="color:red;"></span>
             </div>
             <div>
                 <input type="submit"  value="Log in" onclick="loginSubmit()"/>
-                <a href="#">Lost your password?</a>
+                <a href="#" onclick="getBackLost()">Find your password?</a>
                 <a th:href="@{/register/toRegister}">Register</a>
             </div>
         </form><!-- form -->
     </section><!-- content -->
 </div><!-- container -->
+
+<div class="modal" tabindex="-1" role="dialog" id="getLostPwd">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">GetBackPassword</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-inline">
+                    <label for="memail" style="margin: 15px">Email address: </label>
+                    <input type="email" class="form-control" id="memail" placeholder="name@example.com">
+                    <span id="emailMsg"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Send to Email</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:insert="~{front-end/index/index::footer}"></div>
 </body>
 </html>

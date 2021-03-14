@@ -344,7 +344,7 @@
            $('#memailMsg').text('電子信箱不可為空');
            $('#memailMsg').css('color','red');
            $('#signup').prop('disabled',true);
-       }else if(memail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/)){
+       }else if(memail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/) == -1 ){
            $('#memailMsg').text('必須符合電子郵件格式');
            $('#memailMsg').css('color','red');
            $('#signup').prop('disabled',true);
@@ -354,7 +354,8 @@
                url:'/register/registerCheckMemail',
                data:{'memail':memail},
                success:function (data){
-                   if(data){
+                   console.log(data)
+                   if(data === 'true'){
                        $('#memailMsg').text('此電子信箱尚未被使用');
                        $('#memailMsg').css('color','green');
                        $('#signup').prop('disabled',false);

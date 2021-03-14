@@ -4,8 +4,12 @@
     <select id="getAllMembers" resultType="members">
         select * from project.members;
     </select>
-    <select id="getOneMember" resultType="members">
+    <select id="getOneMemberById" resultType="members">
         select * from project.members where memno = #{id};
+    </select>
+
+    <select id="getOneMemberByMememail" resultType="members">
+        select * from project.members where memail = #{memail};
     </select>
 
     <insert id="addMember" parameterType="members">

@@ -3,6 +3,7 @@ package com.jason.controller;
 import com.jason.mapper.MemberMapper;
 import com.jason.pojo.Members;
 import org.apache.ibatis.annotations.Param;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/log")
 public class LogController {
 
+    Logger logger = Logger.getLogger(this.getClass());
+
     @Autowired
     MemberMapper memberMapper;
 
@@ -28,6 +31,7 @@ public class LogController {
 
     @RequestMapping("/login")
     public ModelAndView login(@RequestParam("memacc")String memacc, @RequestParam("mempwd")String mempwd, HttpSession session){
+
         ModelAndView modelAndView = null ;
         Members member = memberMapper.loginCheckMemacc(memacc);
         if(member != null && mempwd.equals(member.getMempwd())){
@@ -43,10 +47,5 @@ public class LogController {
             modelAndView.addObject("msg","帳號密碼輸入錯誤");
         }
         return modelAndView;
-    }
-    @RequestMapping("/logout")
-    public String logout(HttpSession session){
-            session.invalidate();
-            return  "front-end/index/index";
     }
 }

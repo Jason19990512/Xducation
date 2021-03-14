@@ -21,14 +21,22 @@ public class MembersMapperTest {
     }
 
     @Test
-    public void getOneMember(){
-        Members oneMember = memberMapper.getOneMember(1);
+    public void getOneMemberById(){
+        Members oneMember = memberMapper.getOneMemberById(1);
         System.out.println(oneMember);
     }
 
     @Test
+    public void getOneMemberByMememail(){
+        Members oneMember = memberMapper.getOneMemberById(1);
+        System.out.println(oneMember);
+        Members anothermember = memberMapper.getOneMemberByMememail(oneMember.getMemail());
+        System.out.println(anothermember);
+    }
+
+    @Test
     public void addMember(){
-        Members oneMember = memberMapper.getOneMember(1);
+        Members oneMember = memberMapper.getOneMemberById(1);
         oneMember.setMemacc("M00032");
         oneMember.setMemail("jpg1234@gmail.com");
         int flag = memberMapper.addMember(oneMember);
@@ -42,7 +50,7 @@ public class MembersMapperTest {
 
     @Test
     public void updateMember(){
-        Members oneMember = memberMapper.getOneMember(35);
+        Members oneMember = memberMapper.getOneMemberById(35);
         oneMember.setMemacc("M00033");
         int flag = memberMapper.updateMember(oneMember);
         if(flag > 0){
@@ -86,7 +94,7 @@ public class MembersMapperTest {
 
     @Test
     public void registerCheckMemail(){
-        int flag = memberMapper.registerCheckMemail("jpg1234@gmail.com");
+        int flag = memberMapper.registerCheckMemail("davidseafood@gmail.com");
         if(flag > 0){
             System.out.println("信箱已使用");
         }else{
