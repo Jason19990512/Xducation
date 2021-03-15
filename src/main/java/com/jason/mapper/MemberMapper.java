@@ -14,6 +14,8 @@ public interface MemberMapper {
 
     Members getOneMemberById(@Param("id") int id);
 
+    Members getOneMemberByMemacc(@Param("memacc")String memacc);
+
     Members getOneMemberByMememail(@Param("memail") String memail);
 
     Integer addMember(Members members);
@@ -21,8 +23,6 @@ public interface MemberMapper {
     Integer updateMember(Members members);
 
     Integer deleteMember(@Param("id")int id);
-
-    Members loginCheckMemacc(@Param("memacc")String memacc);
 
     Integer registerCheckMemacc(@Param("memacc")String memacc);
 

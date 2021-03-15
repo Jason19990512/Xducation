@@ -35,7 +35,7 @@
         delete from project.members where memno = #{id}
     </delete>
 
-    <select id="loginCheckMemacc" resultType="members">
+    <select id="getOneMemberByMemacc" resultType="members">
         select * from project.members where memacc = #{memacc}
     </select>
 

@@ -30,14 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 設定頁面可以被哪一種角色訪問
         // 首頁可以被任何角色訪問 "/" -> 所有的請求
-        http.authorizeRequests().antMatchers("/","/register/**").permitAll();
+        http.authorizeRequests().antMatchers("/","/register/**","/log/**").permitAll();
 //                .antMatchers("/level2/**").hasRole("vip2")
 //                .antMatchers("/level3/**").hasRole("vip3");
 
 
         //開啟自動配置登入功能
         //沒有登入即沒有角色會被導到登入頁面
-        //  /login請求來到登錄頁(預設的)
+//        //  /login請求來到登錄頁(預設的)
         http.formLogin().loginPage("/log/toLogin") //指定登入頁面
                         .loginProcessingUrl("/log/login") //提交參數的表單
                         .usernameParameter("memacc")

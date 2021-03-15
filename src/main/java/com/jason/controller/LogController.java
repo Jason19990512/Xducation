@@ -29,23 +29,22 @@ public class LogController {
         return "front-end/login/login";
     }
 
-    @RequestMapping("/login")
-    public ModelAndView login(@RequestParam("memacc")String memacc, @RequestParam("mempwd")String mempwd, HttpSession session){
-
-        ModelAndView modelAndView = null ;
-        Members member = memberMapper.loginCheckMemacc(memacc);
-        if(member != null && mempwd.equals(member.getMempwd())){
-            modelAndView = new ModelAndView("front-end/index/index");
-            session.setAttribute("isLogin",true);
-            session.setAttribute("memacc",memacc);
-        }else{
-            member = new Members();
-            member.setMemacc(memacc);
-            member.setMempwd(mempwd);
-            modelAndView = new ModelAndView("front-end/login/login");
-            modelAndView.addObject("member",member);
-            modelAndView.addObject("msg","帳號密碼輸入錯誤");
-        }
-        return modelAndView;
-    }
+//    @RequestMapping("/login")
+//    public ModelAndView login(@RequestParam("memacc")String memacc, @RequestParam("mempwd")String mempwd, HttpSession session){
+//
+//        ModelAndView modelAndView = null ;
+//        Members member = memberMapper.getOneMemberByMemacc(memacc);
+//        logger.info(member.toString());
+//        if(member != null && mempwd.equals(member.getMempwd())){
+//            modelAndView = new ModelAndView("front-end/index/index");
+//        }else{
+//            member = new Members();
+//            member.setMemacc(memacc);
+//            member.setMempwd(mempwd);
+//            modelAndView = new ModelAndView("front-end/login/login");
+//            modelAndView.addObject("member",member);
+//            modelAndView.addObject("msg","帳號密碼輸入錯誤");
+//        }
+//        return modelAndView;
+//    }
 }

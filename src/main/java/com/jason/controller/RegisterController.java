@@ -38,6 +38,7 @@ public class RegisterController {
     @Autowired
     MailService mailService;
 
+
     /**
      * 導到註冊頁面
      * @param model

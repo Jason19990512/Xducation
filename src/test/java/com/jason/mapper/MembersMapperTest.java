@@ -73,7 +73,7 @@ public class MembersMapperTest {
 
     @Test
     public void loginCheckMemacc(){
-        Members member = memberMapper.loginCheckMemacc("M00001");
+        Members member = memberMapper.getOneMemberByMemacc("M00001");
         System.out.println(member);
         if(member != null ){
             System.out.println("帳號已存在");

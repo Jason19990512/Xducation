@@ -1,0 +1,229 @@
+  textarea {
+        width: 300px;
+        height: 100px;
+    }
+
+    #pic {
+        width: 53px;
+        height: 53px;
+    }
+
+    img.icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    img.pic {
+        width: 36px;
+        height: 36px;
+    }
+
+    h2.form-title {
+        width: 400px;
+        margin-top: 10px;
+        margin-left:5px;
+    }
+
+    div.signup-form {
+        width: 600px;
+        margin-right: 5px;
+    }
+
+    div.signup-content {
+        height: 650px;
+    }
+
+    h5.h5 {
+        color: black;
+    }
+
+    div#logo {
+        padding-top: 12px;
+    }
+
+    input.input {
+        padding: 0px;
+        margin: auto;
+    }
+
+    img#mprofile {
+        -webkit-box-shadow: 3px 3px 5px 5px #BEBEBE;
+        -moz-box-shadow: 3px 3px 5px 5px #BEBEBE;
+        box-shadow: 3px 3px 5px 5px #BEBEBE;
+        width: 350px;
+        height: 350px;
+        margin-left: -50px;
+        margin-top: 30px;
+        boder-radius: 10px;
+        border-radius: 60px;
+    }
+
+    div.signup-image {
+        width: 500px;
+        margin: 60px 0px 0px -60px;
+    }
+
+    .signup {
+        margin-bottom: 50px;;
+    }
+
+    th#mpic {
+        padding-top: 0px;
+    }
+
+    div#bg {
+        -webkit-box-shadow: 0 0 15px #8E8E8E;
+        -moz-box-shadow: 0 0 15px #8E8E8E;
+        box-shadow: 0 0 15px #5B5B5B;
+    }
+
+    input#register.form-submit {
+        margin-left: 70px;
+    }
+
+    h5#regdate {
+        margin-left: -140px;
+        margin-top:50px;
+    }
+
+    figure#a_mprofile {
+        margin-left: 50px;
+        margin-top: 30px;
+    }
+    table{
+        margin-left: -35px;
+        margin-top: -20px;
+    }
+
+    img#nav_icon {
+        width: 36px;
+        height: 36px;
+    }
+    /*=================開關=================*/
+    .toggle-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 5rem;
+        height: 2.5rem;
+        font-family: sans-serif;
+        font-size: 0.75rem;
+        font-weight: 100;
+    }
+
+    .toggle {
+        display: none;
+    }
+
+    .foux-toggle {
+        position: relative;
+        width: 5rem;
+        height: 2.5rem;
+        border-radius: 2.5rem;
+        margin: 0;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #E4E4E4;
+        background-color: #F7F7F7;
+        -webkit-transition: background-color 0.2s
+        cubic-bezier(0.34, 0.93, 0.85, 0.91);
+        transition: background-color 0.2s cubic-bezier(0.34, 0.93, 0.85, 0.91);
+        margin:15px 0 0 0;
+    }
+
+    .foux-toggle:before {
+        content: "";
+        position: absolute;
+        top: 0.25rem;
+        left: 0.3125rem;
+        display: block;
+        width: 1.875rem;
+        height: 1.875rem;
+        border-radius: 1.875rem;
+        background-color: white;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.2s cubic-bezier(0.34, 0.93, 0.85, 0.91);
+        transition: left 0.2s cubic-bezier(0.34, 0.93, 0.85, 0.91);
+    }
+
+    .toggle:checked ~ .foux-toggle {
+        background-color: #0099CC;
+    }
+
+    .toggle:checked ~ .foux-toggle:before {
+        left: 2.75rem;
+
+    }
+
+    .toggle--label:before, .toggle--label:after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        -webkit-transition: opacity 0.4s linear;
+        transition: opacity 0.4s linear;
+    }
+
+    .toggle--label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        line-height: 2.5rem;
+        cursor: pointer;
+        z-index: 10;
+        letter-spacing: 0.0625rem;
+    }
+    input[type=checkbox]:not(old) + label {
+        display: inline-block;
+        line-height: 0.5em;
+        margin-top: 10px;
+        width: 65px;
+        text-align: right;
+    }
+
+    .toggle--label:before {
+        content: 'On';
+        right: 40%;
+        left: 0;
+        color: white;
+        opacity: 0;
+    }
+
+    .toggle:checked+.toggle--label:before {
+        opacity: 1;
+        margin: 40px 0 0 -40px;
+    }
+
+    .toggle--label:after {
+        content: 'Off';
+        position: absolute;
+        right: 0;
+        left: 40%;
+        opacity: 1;
+        margin: 40px 0 0 -115px;
+    }
+
+    .toggle:checked+.toggle--label:after {
+        opacity: 0;
+        -webkit-transition-duration: 0.05s;
+        transition-duration: 0.05s;
+    }
+
+    html {
+        background-color: #FBFBFB;
+    }
+    /*=============================================*/
+    body {
+        font-family: 'Gochi Hand';
+    }
+
+    div.main {
+        font-size: 15px;
+        padding: 150px 0 0 0;
+        background:
+                url("<%=request.getContextPath()%>/front-end/members/assets/img/bgPic.png");
+    }
