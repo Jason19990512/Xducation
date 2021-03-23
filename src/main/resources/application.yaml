@@ -17,9 +17,11 @@ spring:
       starttls.enable: true
       ssl.trust: smtp.gmail.com
 #thymeleaf
-thymeleaf: cache=false
+  thymeleaf: cache=false
 
 #整合mybatis
 mybatis.type-aliases-package: com.jason.pojo
-
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

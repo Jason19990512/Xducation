@@ -1,6 +1,8 @@
 package com.jason.config;
 
 import com.jason.controller.RegisterController;
+import com.jason.filter.loginFilter;
+import com.jason.handler.AppsAuthenticationFailureHandler;
 import com.jason.mapper.MemberMapper;
 import com.jason.pojo.Members;
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 import java.util.List;
 
@@ -30,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 設定頁面可以被哪一種角色訪問
         // 首頁可以被任何角色訪問 "/" -> 所有的請求
-        http.authorizeRequests().antMatchers("/","/register/**","/log/**").permitAll();
+        http.addFilterBefore(new loginFilter(), AnonymousAuthenticationFilter.class).
+                authorizeRequests().antMatchers("/","/register/**","/log/**").permitAll();
 //                .antMatchers("/level2/**").hasRole("vip2")
 //                .antMatchers("/level3/**").hasRole("vip3");
 
@@ -41,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/log/toLogin") //指定登入頁面
                         .loginProcessingUrl("/log/login") //提交參數的表單
                         .usernameParameter("memacc")
-                        .passwordParameter("mempwd");
+                        .passwordParameter("mempwd")
+                        .failureHandler(new AppsAuthenticationFailureHandler());;
+
 
 
 

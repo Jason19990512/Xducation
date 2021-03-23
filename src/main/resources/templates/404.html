@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
@@ -53,7 +53,7 @@
 
                         <p>the page you are looking for not avaible!</p>
 
-                        <a href="" class="link_404">Go to Home</a>
+                        <a th:href="@{/}" class="link_404">Go to Home</a>
                     </div>
                 </div>
             </div>

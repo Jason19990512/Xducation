@@ -1,23 +1,15 @@
 package com.jason.controller;
 
 import com.jason.mapper.MemberMapper;
-import com.jason.pojo.Members;
-import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-
-import javax.servlet.http.HttpSession;
-
 
 
 @Controller
 @RequestMapping("/log")
-public class LogController {
+public class LogController extends IndexController{
 
     Logger logger = Logger.getLogger(this.getClass());
 
@@ -28,6 +20,8 @@ public class LogController {
     public String tologin(){
         return "front-end/login/login";
     }
+
+
 
 //    @RequestMapping("/login")
 //    public ModelAndView login(@RequestParam("memacc")String memacc, @RequestParam("mempwd")String mempwd, HttpSession session){

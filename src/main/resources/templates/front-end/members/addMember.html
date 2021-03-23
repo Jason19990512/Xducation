@@ -46,7 +46,7 @@
                     </a>
 
                     <div class="signup-image">
-                        <a th:href="@{/toLogin}" class="signup-image-link" style="font-family: 'Gochi Hand';">
+                        <a th:href="@{/log/toLogin}" class="signup-image-link" style="font-family: 'Gochi Hand';">
                             I am already member
                         </a>
                     </a>
@@ -135,7 +135,6 @@
                                                name="file" style="display: none;" id="file" />
                                     </label>
                                 </div>
-                                    <input type="hidden" name="regdate" id="regdate">
                                     <input type="hidden" name="memdelete" value="0">
                                     <input type="hidden" name="mprofile" id="mprofile" th:value="${member == null? '' : member.getMprofile() }">
                                 <div class="form-group form-button">
@@ -222,7 +221,6 @@
         //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
     });
 
-    $('#regdate').val($('#f_date1').val());
 
 
     // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------

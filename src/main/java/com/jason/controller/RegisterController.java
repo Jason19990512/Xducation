@@ -1,5 +1,6 @@
 package com.jason.controller;
 
+import com.jason.config.SecurityConfig;
 import com.jason.mapper.MailForLostPwdMapper;
 import com.jason.mapper.MemberMapper;
 import com.jason.pojo.MailForLostPwd;
@@ -8,6 +9,8 @@ import com.jason.service.MailService;
 import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,10 +26,12 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/register")
-public class RegisterController {
+public class RegisterController extends IndexController{
     Logger logger = Logger.getLogger(RegisterController.class);
 
     @Autowired
@@ -39,6 +44,7 @@ public class RegisterController {
     MailService mailService;
 
 
+
     /**
      * 導到註冊頁面
      * @param model
@@ -47,7 +53,11 @@ public class RegisterController {
     @RequestMapping("/toRegister")
     public String toRegister(Model model){
         model.addAttribute("registerMsg","");
-        model.addAttribute("member",new Members());
+        if(getUserName() != null){
+            model.addAttribute("member",memberMapper.getOneMemberByMemacc(getUserName()));
+        }else{
+            model.addAttribute("member",new Members());
+        }
         return "front-end/members/addMember";
     }
 
@@ -86,23 +96,20 @@ public class RegisterController {
      * @param member
      * @param file
      * @param request
-     * @param model
      * @return
      */
     @RequestMapping("/addMembers")
-    public String addMembers(@ModelAttribute(value = "member") Members member, @RequestParam("file") MultipartFile file, HttpServletRequest request,Model model) {
-
+    public String addMembers(@ModelAttribute(value = "member") Members member, @RequestParam("file") MultipartFile file, HttpServletRequest request,HttpSession session) {
+        Integer flag = 0 ;
         try {
-            if(memberMapper.registerCheckMemacc(member.getMemacc()) > 0 || memberMapper.registerCheckMemail(member.getMemail()) > 0 ){
-                model.addAttribute("registerMsg","帳號註冊失敗，確認帳號與信箱是否被使用");
-                return "front-end/members/addMember";
-            }
-            Integer flag = memberMapper.addMember(member);
-
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/resources/upload/";
+                member.setMprofile("/upload/member/" + member.getMemacc() + "/" + fileName);
+                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/resources/static/upload/member/"+member.getMemacc() + "/";
                 File destination = new File(filePath + fileName);
+                if(!destination.exists()){
+                    destination.mkdirs();
+                }
                 try {
                     file.transferTo(destination);
                     logger.info("會員圖片上傳成功成功");
@@ -110,11 +117,19 @@ public class RegisterController {
                     logger.error(e.toString(), e);
                 }
             }
-
+            member.setRoleList("S");
+            Map currentMap = new HashMap();
+            currentMap.put(session.getId(),member);
+            session.setAttribute("currentMap", currentMap);
+            flag = memberMapper.addMember(member);
+            setCurrentUser(member.getMemacc());
         } catch (Exception e) {
             logger.error(e.toString(), e);
         }
-        return "front-end/login/login";
+        if(flag > 0)
+            return "front-end/index/index";
+        else
+            return "404";
     }
 
     /**
@@ -141,8 +156,6 @@ public class RegisterController {
      */
     @RequestMapping("/resetPwd")
     public String resetPwd(@RequestParam("sid") String sid,@RequestParam("memail") String memail, HttpSession session, Model model){
-        logger.info("sid >>>>>> " + sid);
-        logger.info("memail >>>>>> " + memail);
 
         Members member = memberMapper.getOneMemberByMememail(memail);
         model.addAttribute("memail",memail);
@@ -192,4 +205,6 @@ public class RegisterController {
             return "404";
         }
     }
+
+
 }

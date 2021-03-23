@@ -49,7 +49,7 @@
     <section class="signup">
 
         <form method='POST' class='register-form'
-              ACTION='#'
+              th:object="${member}"
               id='register-form' enctype='multipart/form-data'>
 
             <div class="container" id="bg">
@@ -82,11 +82,11 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <p>姓名</p>
+                                    <p th:text="${member.getMemname()}"></p>
                                 </td>
                                 <th></th>
                                 <td>
-                                    <p>才不告訴你勒:'P</p>
+                                    <p th:text="${member.getMphone()}"></p>
                                 </td>
 
                             </tr>
@@ -114,11 +114,11 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <p>生日</p>
+                                    <p th:text="${member.getMembday()}"></p>
                                 </td>
                                 <th></th>
                                 <td>
-                                    <p>郵件</p>
+                                    <p th:text="${member.getMemail()}"></p>
                                 </td>
                             </tr>
                             <tr>
@@ -242,17 +242,18 @@
                             </h5>
                         </div>
                         <figure id='a_mprofile'>
-                            <img id='mprofile' class="pimg">
-<!--                                 th:src="@{/front-end/members/MprofileDisplayServlet?MEMNO=${membersVO.memno}}"-->
+                            <img id='mprofile' class="pimg"
+                                 th:src="${member.getMprofile()}">
                         </figure>
                         <h5 id='regdate' style="text-align: center; color: black">
                             <img class="pic"
                                  th:src="@{/front-end/members/signIn&updateMembers_css/images/join.svg}">註冊會員日期:
-<!--                            <span th:text="${#dates.format(membersVO.regdate,'yyyy-MM-dd HH:mm:ss')}"></span>-->
+                            <span th:text="${#dates.format(member.getRegdate(),'yyyy-MM-dd')}"></span>
                         </h5>
                     </div>
                 </div>
             </div>
+            <button class="btn-primary" onclick="submit(event);">更改會員資料</button>
         </form>
 
 
@@ -264,45 +265,13 @@
 
 <!-- JS -->
 <script type="text/javascript">
-    //=============提示文字=============
-    function status() {
-        swal('老師資格審核中', '請耐心等候1~3個工作天，一但審核完畢，即會立刻通知', 'info');
-    }
-    var message = '${errorMsgs.get(0)}';
-    if (message === '200') {
-        swal('已成功更新', '您的個人檔案!', 'success');
-    } else if (message.length !== 0) {
-        swal('注意', message, 'warning');
-    }
-    //================預覽圖片========================
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var imageTagID = input.getAttribute("targetID");
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = document.getElementById(imageTagID);
-                img.setAttribute("src", e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
-    $(document).ready(function(){
 
-        $('#provide-muffins').click(function(){
-            $.ajax({
-                type : "post",
-                url  : "<%=request.getContextPath()%>/front-end/members/MemdeleteSwichServlet",
-                data : {
-                    memno : "${loginMembersVO.memno}",
-                },
-                success : function(data){
-                    console.log(123);
-                }
-            });
-        });
-
-    });
+    function submit(event){
+        event.preventDefault();
+        $('#register-form').attr('action','/register/toRegister');
+        $('#register-form').submit();
+    }
 
 </script>
 

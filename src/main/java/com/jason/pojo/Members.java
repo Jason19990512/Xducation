@@ -19,7 +19,7 @@ public class Members {
     private String memail;
     private String mphone;
     private String mprofile;
-    private String regdate;
+    private Timestamp regdate;
     private Integer memdelete;
     private String roleList;
 }

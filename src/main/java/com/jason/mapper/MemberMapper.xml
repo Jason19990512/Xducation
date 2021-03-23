@@ -13,8 +13,20 @@
     </select>
 
     <insert id="addMember" parameterType="members">
-        insert into project.members(memacc,mempwd,memname,nkname,membday,memail,mphone,regdate)
-                             values(#{memacc},#{mempwd},#{memname},#{nkname},#{membday},#{memail},#{mphone},#{regdate})
+        insert into project.members
+                <trim prefix="(" suffix=")" suffixOverrides="," >
+                            memacc,mempwd,memname,nkname,membday,memail,mphone,
+                                    <if test="mprofile !=null || mprofile != '' ">
+                                        mprofile
+                                    </if>
+                </trim>
+            values
+                <trim prefix="(" suffix=")" suffixOverrides="," >
+                             #{memacc},#{mempwd},#{memname},#{nkname},#{membday},#{memail},#{mphone},
+                                    <if test="mprofile !=null || mprofile != '' ">
+                                        #{mprofile}
+                                    </if>
+                </trim>
     </insert>
     <update id="updateMember" parameterType="members">
         update project.members
