@@ -39,22 +39,26 @@
 
                     <button type="button"  id="add">Magic BTN</button>
 
-                    <a th:href="@{/index}">
-                        <img id='preview_progressbarTW_img'
-                            th:src="@{/front-end/members/assets/img/head/01.png}"
-                            alt="sing up image">
-                    </a>
+
+
+                    <img  id='preview_progressbarTW_img'
+                         th:src="@{/front-end/members/assets/img/head/01.png}"
+                         alt="sing up image">
 
                     <div class="signup-image">
-                        <a th:href="@{/log/toLogin}" class="signup-image-link" style="font-family: 'Gochi Hand';">
+                        <a th:if="${isUpdate == false}" th:href="@{/log/toLogin}" class="signup-image-link" style="font-family: 'Gochi Hand';">
                             I am already member
+                        </a>
+                        <a th:if="${isUpdate == true}" th:href="@{/index}" class="signup-image-link" style="font-family: 'Gochi Hand';">
+                            Back to index page
                         </a>
                     </a>
 
                     </div>
                     <div class="signup-content">
                         <div class="signup-form">
-                            <h2 class="form-title">Sign up</h2>
+                            <h2 th:if="${isUpdate == false}" class="form-title">Sign up</h2>
+                            <h2 th:if="${isUpdate == true}" class="form-title">Update</h2>
                             <h3 th:text="${registerMsg}" style="color:red";></h3>
                             <form  class="register-form"  id="register-form" th:object="${member}">
                                 <input type="hidden" name="memno">
@@ -62,7 +66,8 @@
                                     <img class="icon1"
                                          th:src="@{/front-end/members/signIn&updateMembers_css/images/memacc.svg}">
                                     <label for="memacc"></label>
-                                    <input th:value="${member == null? '' : member.getMemacc() }" id="memacc" type="text" name="memacc" class="input" onblur="checkMemaccRequest()" placeholder="Account" required  maxlength="20"/>
+                                    <input th:readonly="${isUpdate}" th:value="${member == null? '' : member.getMemacc() }" id="memacc" type="text" name="memacc" class="input" onblur="checkMemaccRequest()" placeholder="Account" required  maxlength="20"/>
+
                                     <span id="memaccMsg"></span>
                                 </div>
                                 <div class="form-group">
@@ -112,7 +117,7 @@
                                     <img class="icon1"
                                          th:src="@{/front-end/members/signIn&updateMembers_css/images/new-email.svg}"
                                          alt=""> <label for="memail"></label>
-                                    <input type="email" id="memail" th:value="${member == null? '' : member.getMemail() }"
+                                    <input type="email" id="memail" th:readonly="${isUpdate}" th:value="${member == null? '' : member.getMemail() }"
                                            class="input" name="memail" onblur="registerCheckMemail()" onkeyup="registerCheckMemail()"
                                            placeholder="Your Email" required />
                                     <span id = "memailMsg"></span>
@@ -138,7 +143,7 @@
                                     <input type="hidden" name="memdelete" value="0">
                                     <input type="hidden" name="mprofile" id="mprofile" th:value="${member == null? '' : member.getMprofile() }">
                                 <div class="form-group form-button">
-                                    <button class="btn btn-primary" onclick="submitSignup()">Sign up</button>
+                                    <button class="btn btn-primary" onclick="submitSignup()" id="signup">Sign up</button>
                                 </div>
                             </form>
                         </div>
@@ -148,8 +153,9 @@
                 </div>
 
             </section>
-
-
+            <input type="hidden" id="imgurlForAdd" th:value="${member ==null? '':member.getMprofile()}" th:if="${isUpdate == false}">
+            <input type="hidden" id="imgurlForUpdate" th:value="${member.getMprofile()}" th:if="${isUpdate == true}">
+            <input type="hidden" id="isUpdate" value="true" th:if="${isUpdate == true}">
         </div>
 </body>
 
@@ -172,6 +178,17 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function (){
+
+       if($('#imgurlForUpdate').val() !=="") {
+           $('#preview_progressbarTW_img').attr('src',$('#imgurlForUpdate').val());
+       }
+
+        if($('#imgurlForAdd').val() !=="") {
+            $('#preview_progressbarTW_img').attr('src',$('#imgurlForAdd').val());
+        }
+    });
+
     $("#add").click(function(e){
         e.preventDefault();
         $("#memacc").val("M00031");
@@ -182,6 +199,8 @@
         $("#mphone").val("0987323020");
         $("#memail").val("scobboy0121@gmail.com");
         $("#f_date1").val("1991-11-12");
+        checkMemaccRequest();
+        registerCheckMemail();
     })
 
     function readURL(input){
@@ -274,6 +293,9 @@
     //確認帳號是否被註冊
     function checkMemaccRequest(){
         var memacc = $("#memacc").val();
+        if($('#isUpdate').val() ==='true'){
+            return ;
+        }
         if(memacc == null || memacc.trim().length == 0) {
             $('#memaccMsg').text('帳號長度不可為空');
             $('#memaccMsg').css('color','red');
@@ -337,6 +359,9 @@
     }
 
     function registerCheckMemail(){
+        if($('#isUpdate').val() ==='true'){
+            return ;
+        }
        var memail = $('#memail').val();
        if(memail == null || memail.trim().length == 0){
            $('#memailMsg').text('電子信箱不可為空');

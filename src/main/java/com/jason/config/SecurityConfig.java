@@ -1,27 +1,22 @@
 package com.jason.config;
 
-import com.jason.controller.RegisterController;
-import com.jason.filter.loginFilter;
-import com.jason.handler.AppsAuthenticationFailureHandler;
-import com.jason.mapper.MemberMapper;
-import com.jason.pojo.Members;
+import com.jason.service.MyUserDetailsService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
-import java.util.List;
+
 
 //開啟SpringSecurity
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
     @Autowired
-    MemberMapper memberMapper;
+    MyUserDetailsService myUserDetailsService;
 
     Logger logger = Logger.getLogger(this.getClass());
 
@@ -33,8 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 設定頁面可以被哪一種角色訪問
         // 首頁可以被任何角色訪問 "/" -> 所有的請求
-        http.addFilterBefore(new loginFilter(), AnonymousAuthenticationFilter.class).
-                authorizeRequests().antMatchers("/","/register/**","/log/**").permitAll();
+        http.authorizeRequests().antMatchers("/","/register/**","/log/**","/resources/**").permitAll();
 //                .antMatchers("/level2/**").hasRole("vip2")
 //                .antMatchers("/level3/**").hasRole("vip3");
 
@@ -45,8 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/log/toLogin") //指定登入頁面
                         .loginProcessingUrl("/log/login") //提交參數的表單
                         .usernameParameter("memacc")
-                        .passwordParameter("mempwd")
-                        .failureHandler(new AppsAuthenticationFailureHandler());;
+                        .passwordParameter("mempwd");
 
 
 
@@ -62,15 +55,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        // 什麼帳號 擁有什麼角色
+//        // 什麼帳號 擁有什麼角色
+//
+//        List<Members> allMembers = memberMapper.getAllMembers();
+//
+//        for (Members members : allMembers){
+//            String[] roleList = members.getRoleList().split(",");
+//            auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+//                .withUser(members.getMemacc()).password(new BCryptPasswordEncoder().encode(members.getMempwd())).roles(roleList);
+//        }
 
-        List<Members> allMembers = memberMapper.getAllMembers();
-
-        for (Members members : allMembers){
-            String[] roleList = members.getRoleList().split(",");
-            auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
-                .withUser(members.getMemacc()).password(new BCryptPasswordEncoder().encode(members.getMempwd())).roles(roleList);
-        }
+        auth.userDetailsService(myUserDetailsService);
 
     }
 }

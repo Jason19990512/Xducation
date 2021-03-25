@@ -45,27 +45,20 @@ public class RegisterController extends IndexController{
 
 
 
-    /**
-     * 導到註冊頁面
-     * @param model
-     * @return
-     */
     @RequestMapping("/toRegister")
     public String toRegister(Model model){
         model.addAttribute("registerMsg","");
-        if(getUserName() != null){
+        if(getUserName() != null && !StringUtils.equals("anonymousUser", getUserName())){
             model.addAttribute("member",memberMapper.getOneMemberByMemacc(getUserName()));
+            model.addAttribute("isUpdate",true);
         }else{
             model.addAttribute("member",new Members());
+            model.addAttribute("isUpdate",false);
         }
         return "front-end/members/addMember";
     }
 
-    /**
-     * 檢查帳號是否已經被註冊過
-     * @param memacc
-     * @return
-     */
+
     @RequestMapping("/registerCheckMemacc")
     @ResponseBody
     public String registerCheckMemacc(@RequestParam("memacc") String memacc) {
@@ -76,11 +69,6 @@ public class RegisterController extends IndexController{
             return "true";
     }
 
-    /**
-     * 檢查信箱是否已經被註冊過
-     * @param memail
-     * @return
-     */
     @RequestMapping("/registerCheckMemail")
     @ResponseBody
     public String registerCheckMemail(@RequestParam("memail") String memail) {
@@ -91,54 +79,35 @@ public class RegisterController extends IndexController{
             return "true";
     }
 
-    /**
-     * 加入會員
-     * @param member
-     * @param file
-     * @param request
-     * @return
-     */
     @RequestMapping("/addMembers")
-    public String addMembers(@ModelAttribute(value = "member") Members member, @RequestParam("file") MultipartFile file, HttpServletRequest request,HttpSession session) {
+    public String addMembers(@ModelAttribute(value = "member") Members member, @RequestParam(value="file") MultipartFile file, HttpServletRequest request) {
         Integer flag = 0 ;
         try {
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                member.setMprofile("/upload/member/" + member.getMemacc() + "/" + fileName);
-                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/resources/static/upload/member/"+member.getMemacc() + "/";
+                member.setMprofile("/upload/" + member.getMemacc() + "/" + fileName);
+                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/upload/" + member.getMemacc() + "/";
                 File destination = new File(filePath + fileName);
                 if(!destination.exists()){
                     destination.mkdirs();
                 }
                 try {
                     file.transferTo(destination);
-                    logger.info("會員圖片上傳成功成功");
+                    logger.info("Upload Success!!!");
                 } catch (IOException e) {
                     logger.error(e.toString(), e);
                 }
             }
-            member.setRoleList("S");
-            Map currentMap = new HashMap();
-            currentMap.put(session.getId(),member);
-            session.setAttribute("currentMap", currentMap);
             flag = memberMapper.addMember(member);
-            setCurrentUser(member.getMemacc());
         } catch (Exception e) {
             logger.error(e.toString(), e);
         }
         if(flag > 0)
-            return "front-end/index/index";
+            return "front-end/login/login";
         else
             return "404";
     }
 
-    /**
-     * 寄送重新註冊密碼信件
-     * @param memail
-     * @param request
-     * @return
-     * @throws MessagingException
-     */
     @RequestMapping("/getBackPwd")
     @ResponseBody
     public String getBackPwd(@Param("memail") String memail,HttpServletRequest request) throws MessagingException {
@@ -146,14 +115,6 @@ public class RegisterController extends IndexController{
         return  mailService.mailGetBackPwd(memail, exPath);
     }
 
-    /**
-     * 確認網址送點進來的參數是否失效，並導到重新設定密碼頁面或是錯誤失效頁面
-     * @param sid
-     * @param memail
-     * @param session
-     * @param model
-     * @return
-     */
     @RequestMapping("/resetPwd")
     public String resetPwd(@RequestParam("sid") String sid,@RequestParam("memail") String memail, HttpSession session, Model model){
 
@@ -187,11 +148,6 @@ public class RegisterController extends IndexController{
         return true;
     }
 
-    /**
-     * 參數 -- > 重新設定會員密碼
-     * @param memail
-     * @param mempwd
-     */
     @RequestMapping("/saveResetPwd")
     public String saveResetPwd(@RequestParam("memail") String memail, @RequestParam("mempwd") String mempwd){
         Members member = memberMapper.getOneMemberByMememail(memail);

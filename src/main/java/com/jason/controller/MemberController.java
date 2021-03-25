@@ -26,17 +26,7 @@ public class MemberController extends IndexController{
 
     @RequestMapping("/toDisplayMember")
     public String toDisplayMember(Model model, HttpSession session){
-        String memacc = "";
-        if(getUserName().indexOf("Members") != -1){
-            Map currentMap = (HashMap) session.getAttribute("currentMap");
-            String key = (String)(currentMap.keySet().toArray()[0]);
-            Members member = (Members) currentMap.get(key);
-            if(session.getId().equals(key)){
-                memacc = member.getMemacc();
-            }
-        }else{
-            memacc = getUserName();
-        }
+        String memacc  = getUserName();
 
         Members member = memberMapper.getOneMemberByMemacc(memacc);
 
@@ -44,4 +34,14 @@ public class MemberController extends IndexController{
         return "front-end/members/displayMember";
     }
 
+    @RequestMapping("/updateMember")
+    public String updateMember(Model model){
+        String memacc  = getUserName();
+
+        Members member = memberMapper.getOneMemberByMemacc(memacc);
+
+        model.addAttribute("member",member);
+        model.addAttribute("isUpdate",true);
+        return "front-end/members/addMember";
+    }
 }

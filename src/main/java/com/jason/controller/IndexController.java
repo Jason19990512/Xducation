@@ -38,13 +38,5 @@ public class IndexController {
         }
     }
 
-    //將使用者設定已登入
-    public void setCurrentUser(String memacc) {
-        Members member = memberMapper.getOneMemberByMemacc(memacc);
-        //將使用者放入Authentication物件，代表已通過驗證
-        Authentication auth=new UsernamePasswordAuthenticationToken(member,
-                member.getMempwd(), MemberAuthorityUtils.createAuthorities(member));
-        //將Authentication物件放入SecurityContext存放
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+
 }

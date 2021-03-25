@@ -49,17 +49,17 @@
     <section class="signup">
 
         <form method='POST' class='register-form'
-              th:object="${member}"
               id='register-form' enctype='multipart/form-data'>
 
             <div class="container" id="bg">
                 <div class="signup-content">
                     <div class="signup-form">
-                        <div id="messagesArea"></div>
-                        <h2 class="form-title">
-                            <img id="pic" th:src="@{/front-end/members/signIn&updateMembers_css/images/membership.svg}">
-                            <span>-個人檔案<span sec:authorize="hasRole('T')">(平台教師)</span></span>
-                        </h2>
+                        <div style=" margin: 50px 0;">
+                            <h2 class="form-title">
+                                <img id="pic" th:src="@{/front-end/members/signIn&updateMembers_css/images/membership.svg}">
+                                <span>-個人檔案<span sec:authorize="hasRole('T')">(平台教師)</span></span>
+                            </h2>
+                        </div>
                         <table>
                             <tr>
                                 <th>
@@ -219,6 +219,11 @@
                                         </div>
                                     </th>
                                 </tr>
+                                <tr>
+                                    <td></td>
+                                    <td> <input type="button" class="btn-primary" value="update member" onclick="updatesubmit(event)"></td>
+                                    <td></td>
+                                </tr>
                         </table>
 <!--                        <c:if test="${loginMembersVO.memno eq membersVO.memno}">-->
 <!--                            <div class="form-group">-->
@@ -243,7 +248,7 @@
                         </div>
                         <figure id='a_mprofile'>
                             <img id='mprofile' class="pimg"
-                                 th:src="${member.getMprofile()}">
+                                 th:src="${ member.getMprofile()}">
                         </figure>
                         <h5 id='regdate' style="text-align: center; color: black">
                             <img class="pic"
@@ -253,7 +258,6 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-primary" onclick="submit(event);">更改會員資料</button>
         </form>
 
 
@@ -267,11 +271,12 @@
 <script type="text/javascript">
 
 
-    function submit(event){
+    function updatesubmit(event){
         event.preventDefault();
         $('#register-form').attr('action','/register/toRegister');
         $('#register-form').submit();
     }
+
 
 </script>
 
