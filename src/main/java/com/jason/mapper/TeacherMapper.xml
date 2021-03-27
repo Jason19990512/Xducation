@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.TeacherMapper">
+    <select id="getAllTeacher" resultType="teacher">
+        select * from project.teacher order by teacher.TCHRNO
+    </select>
+
+    <select id="findTeacherByPrimaryKey" resultType="teacher">
+        select * from project.teacher where tchrno = #{tchrno}
+    </select>
+
+    <select id="getOneTeacherByMemno" >
+        select * from project.teacher where refmemno = #{refmemno}
+    </select>
+
+    <insert id="insertTeacher" parameterType="teacher">
+        insert into project.teacher
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            refmemno,tchrintro,bankacc,
+            <if test="tchrcert !=null || tchrcert != '' ">
+                tchrcert
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            #{refmemno},#{tchrintro},#{bankacc},
+            <if test="tchrcert !=null || tchrcert != '' ">
+                #{tchrcert}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateTeacher" parameterType="teacher">
+        update project.teacher
+        <set>
+            <if test="refmemno != null">refmemno = #{refmemno},</if>
+            <if test="tchrintro != null">tchrintro = #{tchrintro},</if>
+            <if test="tchrcert != null">tchrcert = #{tchrcert},</if>
+            <if test="tchrstatus != null">tchrstatus = #{tchrstatus},</if>
+            <if test="rejreason != null">rejreason = #{rejreason},</if>
+            <if test="bankacc != null">bankacc = #{bankacc},</if>
+        </set>
+        where tchrno = #{tchrno}
+    </update>
+
+    <update id="updateTeacherStatus" parameterType="teacher">
+        update project.teacher
+        <set>
+            <if test="tchrstatus != null">tchrstatus = #{tchrstatus},</if>
+            <if test="rejreason != null">rejreason = #{rejreason},</if>
+        </set>
+        where tchrno = #{tchrno}
+    </update>
+
+
+</mapper>

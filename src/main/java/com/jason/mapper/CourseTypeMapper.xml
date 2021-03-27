@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.CourseTypeMapper">
+
+    <select id="getAllCourseType" resultType="courseType">
+        select * from project.course_type;
+    </select>
+
+    <select id="findCourseTypeByPrimaryKey" resultType="courseType">
+        select * from project.course_type where cstypeno = #{cstypeno};
+    </select>
+
+    <insert id="insertCourseType" parameterType="courseType">
+        insert into  project.course_type (cstypename) values (#{cstypename});
+    </insert>
+
+    <update id="updateCourseType" parameterType="courseType">
+        update project.course_type set cstypename = #{cstypename} where cstypeno = #{cstypeno}
+    </update>
+
+    <delete id="deleteCourseType" >
+        delete from project.course_type where cstypeno = #{cstypeno};
+    </delete>
+
+</mapper>

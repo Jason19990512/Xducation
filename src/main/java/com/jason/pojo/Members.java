@@ -9,7 +9,7 @@ import java.sql.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Members {
+public class Members implements java.io.Serializable{
     private String memno;
     private String memacc;
     private String mempwd;

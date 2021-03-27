@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.CourseMapper">
+    <select id="getAllCourse" resultType="course">
+        select * from project.course
+    </select>
+
+    <select id="findCourseByPrimaryKey" resultType="course">
+        select * from project.course where courseno = #{courseno}
+    </select>
+
+    <select id="getBestCourse" resultType="course">
+        select * from project.course order by ROUND((CSSCORE/CSSCORETIMES),2) desc limit 0,8
+    </select>
+
+    <insert id="insertCourse" parameterType="course">
+        insert into project.course
+            <trim prefix="(" suffix=")" suffixOverrides="," >
+                refcstypeno,reftchrno,coursename,courseprice,
+                <if test="courseinfo !=null || courseinfo != '' ">
+                    courseinfo
+                </if>
+                <if test="courseimg !=null || courseimg != '' ">
+                    courseimg
+                </if>
+            </trim>
+        values
+            <trim prefix="(" suffix=")" suffixOverrides="," >
+                #{refcstypeno},#{reftchrno},#{coursename},#{courseprice},
+                <if test="courseinfo !=null || courseinfo != '' ">
+                    #{courseinfo}
+                </if>
+                <if test="courseimg !=null || courseimg != '' ">
+                    #{courseimg}
+                </if>
+            </trim>
+    </insert>
+
+    <update id="updateCourse" parameterType="course">
+        update project.course
+        <set>
+            <if test="refcstypeno != null">refcstypeno = #{refcstypeno},</if>
+            <if test="reftchrno != null">reftchrno = #{reftchrno},</if>
+            <if test="coursename != null">coursename = #{coursename},</if>
+            <if test="courseinfo != null">courseinfo = #{courseinfo},</if>
+            <if test="courseprice != null">courseprice = #{courseprice},</if>
+            <if test="ttltime != null">ttltime = #{ttltime},</if>
+            <if test="csstatus != null">csstatus = #{csstatus},</if>
+            <if test="courseprice != null">courseprice = #{courseprice},</if>
+            <if test="csscore != null">csscore = #{csscore},</if>
+            <if test="csscoretimes != null">csscoretimes = #{csscoretimes},</if>
+            <if test="courseimg != null">courseimg = #{courseimg},</if>
+            courlmod = current_time
+        </set>
+        where courseno = #{courseno}
+    </update>
+</mapper>

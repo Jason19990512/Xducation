@@ -1,6 +1,8 @@
 package com.jason.controller;
 
+import com.jason.mapper.CourseMapper;
 import com.jason.mapper.MemberMapper;
+import com.jason.pojo.Course;
 import com.jason.pojo.Members;
 import com.jason.utils.MemberAuthorityUtils;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,10 +12,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class IndexController {
@@ -23,8 +27,13 @@ public class IndexController {
     @Autowired
     MemberMapper memberMapper;
 
+    @Autowired
+    CourseMapper courseMapper;
+
     @RequestMapping(value = {"/","/index"})
-    public String index(){
+    public String index(Model model){
+        List<Course> bestCourse = courseMapper.getBestCourse();
+        model.addAttribute("bestCourse",bestCourse);
         return "front-end/index/index";
     }
 

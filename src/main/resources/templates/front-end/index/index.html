@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="header-button">
                                     <a href="#" class="btn btn-common">探索課程</a>
-                                    <a th:href="@{/register/toRegister}" class="btn btn-border video-popup">我要註冊</a>
+                                    <a th:href="@{/register/toRegister}" sec:authorize="!isAuthenticated()" class="btn btn-border video-popup">我要註冊</a>
                                 </div>
                             </div>
                         </div>
@@ -155,98 +155,18 @@
             </div>
             <div class="row">
                 <!-- Services item1 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
+                <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${bestCourse}">
                     <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
                         <div class="icon">
-                            <img src="font-end/assets/img/course/img1.jpg">
+                            <img th:src="${course.getCourseimg()}">
                         </div>
                         <div class="services-content">
                             <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
+                            &nbsp;[[${course.getCsscoretimes()}]]則評價
                             <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
-                        </div>
-                    </div>
-                </div>
-                <!-- Services item2 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                        <div class="icon">
-                            <img src="font-end/assets/img/course/img2.jpg">
-                        </div>
-                        <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
-                            <h3><a href="#">和Diane一起拈花惹草，打造個人生活風格</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
-                        </div>
-                    </div>
-                </div>
-                <!-- Services item3 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                        <div class="icon">
-                            <img src="font-end/assets/img/course/img3.jpg">
-                        </div>
-                        <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
-                            <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
-                        </div>
-                    </div>
-                </div>
-                <!-- Services item4 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                        <div class="icon">
-                            <img src="font-end/assets/img/course/img3.jpg">
-                        </div>
-                        <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
-                            <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
-                        </div>
-                    </div>
-                </div>
-                <!-- Services item5 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                        <div class="icon">
-                            <img src="font-end/assets/img/course/img1.jpg">
-                        </div>
-                        <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
-                            <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
-                        </div>
-                    </div>
-                </div>
-                <!-- Services item6 -->
-                <div class="col-md-6 col-lg-4 col-xs-12">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                        <div class="icon">
-                            <img src="font-end/assets/img/course/img2.jpg">
-                        </div>
-                        <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
-                            &nbsp;101則評價
-                            <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p>課程共300分鐘</p>
-                            <p>同學累計9487人</p>
-                            <h5>NT$1680</h5>
+                            <p >課程共[[${course.getTtltime()}]]分鐘</p>
+                            <p >同學累計人</p>
+                            <h5>NT$[[${course.getCourseprice()}]]</h5>
                         </div>
                     </div>
                 </div>

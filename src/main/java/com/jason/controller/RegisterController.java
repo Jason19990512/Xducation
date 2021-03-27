@@ -85,8 +85,8 @@ public class RegisterController extends IndexController{
         try {
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                member.setMprofile("/upload/" + member.getMemacc() + "/" + fileName);
-                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/upload/" + member.getMemacc() + "/";
+                member.setMprofile("/upload/members/" + member.getMemacc() + "/" + fileName);
+                String filePath = "C:/Users/jpg74/IdeaProjects/jason/src/main/upload/members/" + member.getMemacc() + "/";
                 File destination = new File(filePath + fileName);
                 if(!destination.exists()){
                     destination.mkdirs();

@@ -31,7 +31,6 @@
     <update id="updateMember" parameterType="members">
         update project.members
         <set>
-            <if test="memacc != null">memacc = #{memacc},</if>
             <if test="mempwd != null">mempwd = #{mempwd},</if>
             <if test="memname != null">memname = #{memname},</if>
             <if test="nkname != null">nkname = #{nkname},</if>
@@ -40,7 +39,7 @@
             <if test="mphone != null">mphone = #{mphone},</if>
             <if test="mprofile != null">mprofile = #{mprofile},</if>
         </set>
-            where memno = #{memno}
+            where memacc = #{memacc}
     </update>
 
     <delete id="deleteMember" >

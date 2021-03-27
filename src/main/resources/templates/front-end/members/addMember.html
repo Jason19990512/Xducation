@@ -37,7 +37,7 @@
             <section class="signup">
                 <div class="container" id="bg">
 
-                    <button type="button"  id="add">Magic BTN</button>
+                    <button type="button" th:if="${isUpdate == false}" id="add">Magic BTN</button>
 
 
 
@@ -75,10 +75,9 @@
                                          th:src="@{/front-end/members/signIn&updateMembers_css/images/password.svg}">
                                     <label for="mempwd"></label>
                                     <input style="font-family: 'Gochi Hand';" type="password"
-                                           th:value="${member == null? '' : member.getMempwd() }" id="mempwd" class="input" name="mempwd" onkeyup="checkPwdPattern()" onblur="checkPwdPattern()"
+                                           th:value="${member == null? '' : member.getMempwd() }" id="mempwd" class="input" name="mempwd" onkeyup="showpwd()" onblur="checkPwdPattern()" onfocus="showpwd();"
                                            placeholder="Password" required maxlength="20" />
                                     <span id="pwdMsg"></span>
-
                                 </div>
 
                                 <div class="form-group">
@@ -86,7 +85,7 @@
                                          th:src="@{/front-end/members/signIn&updateMembers_css/images/Rmempwd.svg}"><label
                                         for="Rmempwd"></label>
                                     <input type="password" id="Rmempwd"  class="input" th:value="${member == null? '' : member.getMempwd() }"
-                                           placeholder="Password again" required onblur="checkPwdAgain()" onkeyup="checkPwdAgain()"/>
+                                           placeholder="Password again" required onblur="checkPwdAgain()" onkeyup="showpwd()" onfocus="showpwd();"/>
                                     <span id="rePwdMsg"></span>
                                 </div>
                                 <div class="form-group">
@@ -140,11 +139,11 @@
                                                name="file" style="display: none;" id="file" />
                                     </label>
                                 </div>
-                                    <input type="hidden" name="memdelete" value="0">
                                     <input type="hidden" name="mprofile" id="mprofile" th:value="${member == null? '' : member.getMprofile() }">
                                 <div class="form-group form-button">
                                     <button class="btn btn-primary" onclick="submitSignup()" id="signup">Sign up</button>
                                 </div>
+
                             </form>
                         </div>
 
@@ -328,6 +327,8 @@
     }
 
     function checkPwdPattern(){
+        $('#mempwd').attr('type','password');
+        $('#Rmempwd').attr('type','password');
         var pwd = $('#mempwd').val();
         var pwdMsg = $('#pwdMsg')
         var re = new RegExp('[a-zA-Z0-9]{8,20}');
@@ -343,6 +344,8 @@
         }
     }
     function checkPwdAgain(){
+        $('#mempwd').attr('type','password');
+        $('#Rmempwd').attr('type','password');
         var pwd = $('#mempwd').val();
         var rePwd = $('#Rmempwd').val();
         var rePwdMsg = $('#rePwdMsg');
@@ -356,6 +359,10 @@
             $('#signup').prop('disabled',true);
         }
 
+    }
+    function  showpwd(){
+        $('#mempwd').attr('type','text');
+        $('#Rmempwd').attr('type','text');
     }
 
     function registerCheckMemail(){
@@ -391,14 +398,16 @@
            });
        }
     }
-
     function submitSignup(){
-        checkMemaccRequest();
-        registerCheckMemail();
         var myForm = $('#register-form');
         myForm.attr('method','POST');
+
         myForm.attr('enctype','multipart/form-data');
-        myForm.attr('action','/register/addMembers');
+        if($('#isUpdate').val() ==='true')
+            myForm.attr('action','/members/updateMember');
+        else
+            myForm.attr('action','/register/addMembers');
+
         myForm.submit();
     }
 

@@ -250,11 +250,7 @@
                             <img id='mprofile' class="pimg"
                                  th:src="${ member.getMprofile()}">
                         </figure>
-                        <h5 id='regdate' style="text-align: center; color: black">
-                            <img class="pic"
-                                 th:src="@{/front-end/members/signIn&updateMembers_css/images/join.svg}">註冊會員日期:
-                            <span th:text="${#dates.format(member.getRegdate(),'yyyy-MM-dd')}"></span>
-                        </h5>
+
                     </div>
                 </div>
             </div>

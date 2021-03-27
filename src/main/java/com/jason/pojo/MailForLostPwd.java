@@ -9,7 +9,7 @@ import java.math.BigInteger;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MailForLostPwd {
+public class MailForLostPwd implements java.io.Serializable{
     private String memail;
     private String sid;
     private Long expTime;
