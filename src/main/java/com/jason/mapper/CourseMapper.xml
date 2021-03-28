@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jason.mapper.CourseMapper">
-    <select id="getAllCourse" resultType="course">
+    <select id="getCourseByCondition" resultType="course" parameterType="hashmap">
         select * from project.course
+        <where>
+            <if test="refcstypeno != null">and refcstypeno = #{refcstypeno} </if>
+            <if test="reftchrno != null">and reftchrno = #{reftchrno} </if>
+            <if test="coursename != null">and coursename LIKE CONCAT('%',#{coursename},'%') </if>
+            <if test="courseinfo != null">and courseinfo = #{courseinfo} </if>
+            <if test="courseprice != null">and courseprice = #{courseprice} </if>
+            <if test="ttltime != null">and ttltime = #{ttltime} </if>
+            <if test="csstatus != null">and csstatus = #{csstatus} </if>
+            <if test="courseprice != null">and courseprice = #{courseprice} </if>
+            <if test="csscore != null">and csscore = #{csscore} </if>
+            <if test="searchText != null">and coursename LIKE CONCAT('%',#{searchText},'%') </if>
+        </where>
     </select>
 
     <select id="findCourseByPrimaryKey" resultType="course">
@@ -10,7 +22,7 @@
     </select>
 
     <select id="getBestCourse" resultType="course">
-        select * from project.course order by ROUND((CSSCORE/CSSCORETIMES),2) desc limit 0,8
+        select * from project.course where CSSTATUS = '上架'  order by ROUND((CSSCORE/CSSCORETIMES),2) desc limit 0,8
     </select>
 
     <insert id="insertCourse" parameterType="course">

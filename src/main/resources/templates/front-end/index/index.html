@@ -24,7 +24,19 @@
     <link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
     <!-- Font Awesome
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
+    <!-- rateit-->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/rateit.css}" />
+    <script th:src="@{https://kit.fontawesome.com/b99e675b6e.js}"></script>
 
+    <style>
+        .rateit .rateit-preset {
+            color: #FFCC36;
+            background:
+                    left -32px !important;
+                    url(https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/star.gif);
+
+        }
+    </style>
 </head>
 
 <body>
@@ -43,7 +55,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto w-100 justify-content-end clearfix">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/course/toCourseSearch}">
                                 進入搜尋&nbsp;<i class="lni-search"></i>
                             </a>
                         </li>
@@ -116,22 +128,24 @@
                                 Xducation - 最有趣的線上學習平台
                             </div>
                             <br>
+                            <form method="post" th:action="@{/course/toCourseSearch}">
                             <div class="about-wrapper wow fadeInLeft" data-wow-delay="0.4s">
                                 <div id="search">
                                     <table id="searchbox">
                                         <tr>
                                             <td><i class="lni-search"></i></td>
                                             <td>
-                                                <input type="text" size="30" placeholder="&nbsp;&nbsp;今天想學什麼呢？">
+                                                <input type="text" size="30" name="searchText"  placeholder="&nbsp;&nbsp;今天想學什麼呢？">
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="header-button">
-                                    <a href="#" class="btn btn-common">探索課程</a>
+                                    <button class="btn btn-common" >探索課程</button>
                                     <a th:href="@{/register/toRegister}" sec:authorize="!isAuthenticated()" class="btn btn-border video-popup">我要註冊</a>
                                 </div>
                             </div>
+                            </form>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
@@ -161,10 +175,10 @@
                             <img th:src="${course.getCourseimg()}">
                         </div>
                         <div class="services-content">
-                            <i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i><i class="lni-star-filled"></i>
+                            &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.csscore / course.csscoretimes }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                             &nbsp;[[${course.getCsscoretimes()}]]則評價
-                            <h3><a href="#">職人紅酒地圖：Mimmo帶你探索世界十大酒莊</a></h3>
-                            <p >課程共[[${course.getTtltime()}]]分鐘</p>
+                            <h3><a href="#">[[${course.getCoursename}]]</a></h3>
+                            <p >課程共[[${course.getTtltime() /60}]]分鐘</p>
                             <p >同學累計人</p>
                             <h5>NT$[[${course.getCourseprice()}]]</h5>
                         </div>
@@ -413,6 +427,13 @@
     <script th:src="@{/front-end/index/assets/js/jquery.counterup.min.js}"></script>
     <script th:src="@{/front-end/index/assets/js/waypoints.min.js}"></script>
     <script th:src="@{/front-end/index/assets/js/main.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/jquery.rateit.min.js}"></script>
 </body>
+<script>
+    $(document).ready(function(){
 
+    });
+    $("div.rateit, span.rateit").rateit();
+
+</script>
 </html>

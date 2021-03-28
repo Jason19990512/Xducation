@@ -1,0 +1,301 @@
+<!DOCTYPE html >
+        <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Xducation - 陪你成長的學習好夥伴</title>
+            <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+            <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>    <!-- Bootstrap CSS -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+            <!-- Icon -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
+            <!-- Owl carousel -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.carousel.min.css}">
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.theme.css}">
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/magnific-popup.css}">
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/nivo-lightbox.css}">
+            <!-- Animate -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/animate.css}">
+            <!-- Main Style -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/main.css}">
+            <!-- Responsive Style -->
+            <link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
+
+            <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/rateit.css}" />
+            <!-- Font Awesome CSS -->
+            <link rel="stylesheet" th:href="@{/front-end/library/font-awesome/5.15.1/css/all.min.css}">
+
+            <style>
+                .rateit .rateit-preset {
+                    color: #FFCC36;
+                    background:
+                            url(https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/star.gif)
+                            left -32px !important;
+                }
+                label{
+                    height:0;
+                }
+                a.course{
+                    color: rgba(0, 0, 0, 0.65);
+                }
+            </style>
+
+        </head>
+        <body>
+
+
+        <div th:insert="~{front-end/index/index::nav-header}"></div>
+
+        <div id="hero-area" style="background-image: none">
+            <div class="container">
+                <div class="container">
+                    <form id = "searchForm">
+                    <div class="row">
+                        <div class="col-2">
+
+                            <label>課程名稱</label>
+
+                            <div>
+                                <input class="form-control" type="text"
+                                       placeholder="&nbsp;&nbsp;今天想學什麼呢？" id="searchText" >
+                            </div>
+
+                        </div>
+                        <div class="col-2">
+                            <label>類別名稱</label>
+                            <div>
+                                <select class="form-control" id="cstypeno">
+                                    <option>請選擇類別</option>
+                                        <option th:each="courseType : ${allCourseType}" th:value="${courseType.getCstypeno()}">[[${courseType.getCstypename()}]]</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <label>最低價格</label> <input class="form-control" type="number"
+                                                       size="5" min="0" name="minValue" id="min">
+                        </div>
+                        <div class="col-2">
+                            <label>最高價格</label> <input class="form-control" type="number"
+                                                       size="5" min="0" name="maxValue" id="max">
+                        </div>
+                        <div class="col-2">
+                            <label>排序</label>
+                            <select class="form-control" id="order">
+                            <option value="courlmod" selected>最新</option>
+                            <option value="csscore">評價高&#x27A1;低</option>
+                            <option value="ttltime">課時高&#x27A1;低</option>
+                            <option value="courseprice">價格高&#x27A1;低</option>
+                            <option value="coursepriceLow">價格低&#x27A1;高</option>
+                        </select>
+                        </div>
+                        <div class="col-2">
+                            <label></label>
+                            <button type="button" class="btn btn-primary" id="turnin"
+                                    style="display: block">送出查詢</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+
+                <section id="services" class="section-padding">
+                    <div class="container">
+
+                        <!-- Services item1 -->
+
+                        <div class="row seacharea">
+                            <c:forEach var="courseVO" items="${Courselist}">
+                                <div class="col-md-6 col-lg-3 col-xs-12">
+                                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+                                        <a th:href="@{#}" class="course">
+                                            <div class="icon">
+                                                <img th:src="@{#}" class="pic">
+                                            </div>
+                                            <div class="services-content">
+                                                <!--                         	 -->
+                                                &nbsp;&nbsp;&nbsp;<div class="rateit" data-rateit-value="${courseVO.csscore / courseVO.csscoretimes }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                                <br>&nbsp;&nbsp;&nbsp;${courseVO.csscoretimes}則評價
+                                                <h3 style="line-height:32px; height:64px; overflow:hidden;">${courseVO.coursename}</h3></a>
+                                        <%--                             <h3><a href="<%=request.getContextPath()%>/course/course.do?action=getOne_For_Display&courseno=${courseVO.courseno}">${courseVO.coursename}</a></h3> --%>
+
+                                        <!-- 將課程總時數換算為分鐘 -->
+                                        <% Integer ttltimeInMin = ((CourseVO)pageContext.getAttribute("courseVO")).getTtltime()/60; %>
+                                        <p>課程總長 <%= ttltimeInMin %> 分鐘</p>
+
+
+
+                                        <hr>
+                                        <h5 style="bottom:5px;">NT$${courseVO.courseprice}</h5>
+
+                                    </div>
+                                </div>
+                        </div>
+
+                        </c:forEach>
+                    </div>
+
+
+            </div>
+
+            </section>
+        </div>
+        </div>
+
+
+
+        <script>
+            $(document).ready(function(){
+
+                $('body').on('click' , '.shoppingcart',function(){
+                    $.ajax({
+                        url	:"<%=request.getContextPath()%>/Shop/Shopping_Cart.do",
+                        data:{
+                            courseno:$(this).find('#courseno').val(),
+                            action: "shoppingCart"
+                        },
+                        success: function(data){
+                            if(data !== 'false'){
+                                swal('你已將課程加入購物車！', '', 'success');
+
+                            }
+                        }
+                    });
+                });
+
+
+                $('body').on('click' , '.bookmark',function(){
+
+
+                    if(`${loginMembersVO.memno}` == ''){
+                        swal({
+                            title: '您尚未登入',
+                            text: '您將無法追蹤此課程！',
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: '會員登入',
+                        }).then(function(){
+                            this.location.href = '<%=request.getContextPath()%>/front-end/members/signIn.jsp';
+                        }).catch(swal.noop);
+                    }
+                    else{
+
+                        var updateTrackingList;
+
+                        if ($(this).children().attr("class") === "fa fa-heart-o"){
+                            updateTrackingList = "insert";
+                            $(this).children().attr("class","fa fa-heart");
+                        }
+                        else{
+                            updateTrackingList = "delete";
+                            $(this).children().attr("class","fa fa-heart-o");
+                        }
+
+
+
+                        $.ajax({
+                            url	:"<%=request.getContextPath()%>/tracking_list/tracking_list.do",
+                            data:{
+                                courseno : $(this).find('#courseno').val(),
+// 					memno    : $("#memno").val(),
+                                action   : updateTrackingList ,
+                            },
+                            success: function(data){
+                                console.log('操作成功--->searchPage');
+                            }
+                        });
+
+                    }
+                });
+
+                $('#searchText').keydown(function(){
+                    if(event.keyCode == 13){
+                        searchCourse();
+                    }
+                });
+
+
+                $('#turnin').click(function(){
+                    searchCourse();
+                });
+
+                function searchCourse(){
+                    $.ajax({
+                        type:"post",
+                        url	:"<%=request.getContextPath()%>/course/coursesearch.do",
+                        data:{
+                            searchText:$('#searchText').val(),
+                            cstypeno:$('#cstypeno').val(),
+                            memno    : $("#memno").val(),
+                            min:$('#min').val(),
+                            max:$('#max').val(),
+                            order:$('#order').val(),
+                            action:'mutlipleSearch'
+                        },
+                        success: function(data){
+
+                            var JSONarray = JSON.parse(data);
+                            $(".seacharea").empty();
+
+                            var str = "";
+                            for(let i = 0 ; i < JSONarray.length ; i++){
+
+
+
+
+
+// 						str +=  `<div class="col-md-6 col-lg-3 col-xs-12">
+// 		                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+// 		                        <div class="icon">
+// 		                            <img src=  "` +  courseimgno    + `"style="width:200px;height:150px">
+// 		                        </div>
+// 		                        <div class="services-content">`;
+
+                                // 顯鈞：替換成新版本讀圖測試2020/10/22
+                            var pictureURL = "<%=request.getContextPath()%>/course/CoursePictureReaderFromDB?courseno=" + JSONarray[i].courseno;
+
+
+                            str +=  `<div class="col-md-6 col-lg-3 col-xs-12">`;
+			            str +=  `<div class="services-item wow fadeInRight" data-wow-delay="0.3s">`;
+			            str +=  `<div class="icon">`
+			            str +=  `<a href="<%=request.getContextPath()%>/course/course.do?action=showCourseMainPage&courseno=` + JSONarray[i].courseno + `" style="color: rgba(0, 0, 0, 0.65);">`
+						// str +=  `<img src=  "` + pictureURL + `"style="width:200px;height:150px"></div>`;
+                                str +=  `<img src=  "` + pictureURL + `"style="max-width:100%;height:150px"></div>`;
+
+                                str +=  `<div class="services-content">`;
+                                str +=  `&nbsp;&nbsp;<div class="rateit" data-rateit-value="` + JSONarray[i].csscore / JSONarray[i].csscoretimes + `" data-rateit-ispreset="true" data-rateit-readonly="true"></div><br>`;
+
+
+                                str +=  `&nbsp;&nbsp;&nbsp;` + JSONarray[i].csscoretimes + `則評價`;
+                                str +=  `<h3 style="line-height:40px;">` + JSONarray[i].coursename + `</h3></a>`;
+
+                                str +=  `<p>課程總長 `+ Math.floor(JSONarray[i].ttltime/60) +` 分鐘</p>`;
+                                str +=	`<label class="shoppingcart"><i class="fa fa-shopping-cart" aria-hidden="true"><input type ="hidden" name="courseno" 	 id="courseno"   value ="`+ JSONarray[i].courseno +`"/></i>加入購物車</label>`;
+
+
+                                str +=	`<label class="bookmark"><i class="` + JSONarray[i].class +`" aria-hidden="true" style="color:red"><input type ="hidden"  id="courseno" value ="`+ JSONarray[i].courseno +`"/></i>加入追蹤</label><hr>`;
+                                str +=	`<h5>NT$` + JSONarray[i].courseprice + `</h5></div></div></div>`;
+
+                            }
+
+                            $(".seacharea").append(str);
+                            $("div.rateit, span.rateit").rateit()
+
+                            $('.services-item .services-content h3 a').css('font-size','22px');
+                            $('.services-item .services-content h3 a').css('color','#333');
+
+                            $('.services-item .services-content h3 a:hover').css('color','#0099CC');
+
+                        }
+                    });
+                };
+
+            });
+        </script>
+
+        <div th:insert="~{front-end/index/index::footer}"></div>
+        <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/jquery.rateit.min.js}"></script>
+        </body>
+        </html>
