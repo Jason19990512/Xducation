@@ -169,15 +169,18 @@
             </div>
             <div class="row">
                 <!-- Services item1 -->
-                <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${bestCourse}">
-                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+                <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${bestCourse}" >
+                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s" >
                         <div class="icon">
                             <img th:src="${course.getCourseimg()}">
                         </div>
                         <div class="services-content">
-                            &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.csscore / course.csscoretimes }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.getCsscore() / course.getCsscoretimes() }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                             &nbsp;[[${course.getCsscoretimes()}]]則評價
-                            <h3><a href="#">[[${course.getCoursename}]]</a></h3>
+                            <h3>
+                                <a href="#">[[${course.getCoursename}]]</a>
+                                <h3 th:text="${#strings.length(course.getCoursename) > 8} "></h3>
+                            </h3>
                             <p >課程共[[${course.getTtltime() /60}]]分鐘</p>
                             <p >同學累計人</p>
                             <h5>NT$[[${course.getCourseprice()}]]</h5>
@@ -193,7 +196,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-xs-12 wow fadeInLeft" data-wow-delay="0.3s">
-                    <img class="img-fluid" src="font-end/assets/img/head/tchr.png" alt="">
+                    <img class="img-fluid" th:src="@{front-end/index/assets/img/head/tchr.png}" alt="">
                 </div>
                 <div class="col-lg-1 col-md-12 col-xs-12"></div>
                 <div class="col-lg-5 col-md-12 col-xs-12 info">
@@ -266,7 +269,7 @@
                 <!-- 講座區圖片 -->
                 <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
                     <div class="show-box wow fadeInUp" data-wow-delay="0.3s">
-                        <img src="font-end/assets/img/head/calendar.gif" alt="">
+                        <img th:src="@{front-end/index/assets/img/head/calendar.gif}" alt="">
                     </div>
                 </div>
             </div>
@@ -286,7 +289,7 @@
                         <div class="item">
                             <div class="testimonial-item">
                                 <div class="img-thumb">
-                                    <img src="font-end/assets/img/testimonial/img1.jpg" alt="">
+                                    <img th:src="@{front-end/index/assets/img/testimonial/img1.jpg}" alt="">
                                 </div>
                                 <div class="info">
                                     <h2><a href="#">David Smith</a></h2>
@@ -307,7 +310,7 @@
                         <div class="item">
                             <div class="testimonial-item">
                                 <div class="img-thumb">
-                                    <img src="font-end/assets/img/testimonial/img2.jpg" alt="">
+                                    <img th:src="@{front-end/index/assets/img/testimonial/img2.jpg}" alt="">
                                 </div>
                                 <div class="info">
                                     <h2><a href="#">Domeni GEsson</a></h2>
@@ -328,7 +331,7 @@
                         <div class="item">
                             <div class="testimonial-item">
                                 <div class="img-thumb">
-                                    <img src="font-end/assets/img/testimonial/img3.jpg" alt="">
+                                    <img th:src="@{front-end/index/assets/img/testimonial/img3.jpg}" alt="">
                                 </div>
                                 <div class="info">
                                     <h2><a href="#">Dommini Albert</a></h2>
@@ -349,7 +352,7 @@
                         <div class="item">
                             <div class="testimonial-item">
                                 <div class="img-thumb">
-                                    <img src="font-end/assets/img/testimonial/img4.jpg" alt="">
+                                    <img th:src="@{front-end/index/assets/img/testimonial/img4.jpg}" alt="">
                                 </div>
                                 <div class="info">
                                     <h2><a href="#">Fernanda Anaya</a></h2>

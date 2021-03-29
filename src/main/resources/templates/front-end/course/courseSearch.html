@@ -50,14 +50,14 @@
         <div id="hero-area" style="background-image: none">
             <div class="container">
                 <div class="container">
-                    <form id = "searchForm">
+                    <form id = "searchForm" th:object="${CourseGrid}">
                     <div class="row">
                         <div class="col-2">
 
                             <label>課程名稱</label>
 
                             <div>
-                                <input class="form-control" type="text"
+                                <input class="form-control" type="text" name="searchText"
                                        placeholder="&nbsp;&nbsp;今天想學什麼呢？" id="searchText" >
                             </div>
 
@@ -65,33 +65,24 @@
                         <div class="col-2">
                             <label>類別名稱</label>
                             <div>
-                                <select class="form-control" id="cstypeno">
-                                    <option>請選擇類別</option>
+                                <select class="form-control" id="refcstypeno" name="refcstypeno">
+                                        <option value="">請選擇類別</option>
                                         <option th:each="courseType : ${allCourseType}" th:value="${courseType.getCstypeno()}">[[${courseType.getCstypename()}]]</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-2">
-                            <label>最低價格</label> <input class="form-control" type="number"
-                                                       size="5" min="0" name="minValue" id="min">
-                        </div>
-                        <div class="col-2">
-                            <label>最高價格</label> <input class="form-control" type="number"
-                                                       size="5" min="0" name="maxValue" id="max">
-                        </div>
-                        <div class="col-2">
                             <label>排序</label>
-                            <select class="form-control" id="order">
+                            <select class="form-control" id="order" name="order">
                             <option value="courlmod" selected>最新</option>
-                            <option value="csscore">評價高&#x27A1;低</option>
-                            <option value="ttltime">課時高&#x27A1;低</option>
-                            <option value="courseprice">價格高&#x27A1;低</option>
-                            <option value="coursepriceLow">價格低&#x27A1;高</option>
+                            <option value="csscore">評價高</option>
+                            <option value="ttltime">課時高</option>
+                            <option value="courseprice">價格高</option>
                         </select>
                         </div>
                         <div class="col-2">
                             <label></label>
-                            <button type="button" class="btn btn-primary" id="turnin"
+                            <button type="button" class="btn btn-primary" onclick="serachCourse();"
                                     style="display: block">送出查詢</button>
                         </div>
                     </div>
@@ -105,34 +96,21 @@
                         <!-- Services item1 -->
 
                         <div class="row seacharea">
-                            <c:forEach var="courseVO" items="${Courselist}">
-                                <div class="col-md-6 col-lg-3 col-xs-12">
-                                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-                                        <a th:href="@{#}" class="course">
-                                            <div class="icon">
-                                                <img th:src="@{#}" class="pic">
-                                            </div>
-                                            <div class="services-content">
-                                                <!--                         	 -->
-                                                &nbsp;&nbsp;&nbsp;<div class="rateit" data-rateit-value="${courseVO.csscore / courseVO.csscoretimes }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                                                <br>&nbsp;&nbsp;&nbsp;${courseVO.csscoretimes}則評價
-                                                <h3 style="line-height:32px; height:64px; overflow:hidden;">${courseVO.coursename}</h3></a>
-                                        <%--                             <h3><a href="<%=request.getContextPath()%>/course/course.do?action=getOne_For_Display&courseno=${courseVO.courseno}">${courseVO.coursename}</a></h3> --%>
-
-                                        <!-- 將課程總時數換算為分鐘 -->
-                                        <% Integer ttltimeInMin = ((CourseVO)pageContext.getAttribute("courseVO")).getTtltime()/60; %>
-                                        <p>課程總長 <%= ttltimeInMin %> 分鐘</p>
-
-
-
-                                        <hr>
-                                        <h5 style="bottom:5px;">NT$${courseVO.courseprice}</h5>
-
+                            <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${SearchedCourse}">
+                                <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+                                    <div class="icon">
+                                        <img th:src="${course.getCourseimg()}">
+                                    </div>
+                                    <div class="services-content">
+                                        &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.getCsscore() / course.getCsscoretimes() }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                        &nbsp;[[${course.getCsscoretimes()}]]則評價
+                                        <h3><a href="#">[[${course.getCoursename}]]</a></h3>
+                                        <p >課程共[[${course.getTtltime() /60}]]分鐘</p>
+                                        <p >同學累計人</p>
+                                        <h5>NT$[[${course.getCourseprice()}]]</h5>
                                     </div>
                                 </div>
-                        </div>
-
-                        </c:forEach>
+                            </div>
                     </div>
 
 
@@ -147,68 +125,10 @@
         <script>
             $(document).ready(function(){
 
-                $('body').on('click' , '.shoppingcart',function(){
-                    $.ajax({
-                        url	:"<%=request.getContextPath()%>/Shop/Shopping_Cart.do",
-                        data:{
-                            courseno:$(this).find('#courseno').val(),
-                            action: "shoppingCart"
-                        },
-                        success: function(data){
-                            if(data !== 'false'){
-                                swal('你已將課程加入購物車！', '', 'success');
-
-                            }
-                        }
-                    });
-                });
-
-
-                $('body').on('click' , '.bookmark',function(){
-
-
-                    if(`${loginMembersVO.memno}` == ''){
-                        swal({
-                            title: '您尚未登入',
-                            text: '您將無法追蹤此課程！',
-                            type: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: '會員登入',
-                        }).then(function(){
-                            this.location.href = '<%=request.getContextPath()%>/front-end/members/signIn.jsp';
-                        }).catch(swal.noop);
-                    }
-                    else{
-
-                        var updateTrackingList;
-
-                        if ($(this).children().attr("class") === "fa fa-heart-o"){
-                            updateTrackingList = "insert";
-                            $(this).children().attr("class","fa fa-heart");
-                        }
-                        else{
-                            updateTrackingList = "delete";
-                            $(this).children().attr("class","fa fa-heart-o");
-                        }
 
 
 
-                        $.ajax({
-                            url	:"<%=request.getContextPath()%>/tracking_list/tracking_list.do",
-                            data:{
-                                courseno : $(this).find('#courseno').val(),
-// 					memno    : $("#memno").val(),
-                                action   : updateTrackingList ,
-                            },
-                            success: function(data){
-                                console.log('操作成功--->searchPage');
-                            }
-                        });
 
-                    }
-                });
 
                 $('#searchText').keydown(function(){
                     if(event.keyCode == 13){
@@ -228,7 +148,6 @@
                         data:{
                             searchText:$('#searchText').val(),
                             cstypeno:$('#cstypeno').val(),
-                            memno    : $("#memno").val(),
                             min:$('#min').val(),
                             max:$('#max').val(),
                             order:$('#order').val(),
@@ -293,9 +212,30 @@
                 };
 
             });
+
+            function serachCourse(){
+                var request = $.ajax({
+                   method:'post',
+                   url:'/course/searchCourse',
+                   data: $('#searchForm').serialize()
+                });
+            }
         </script>
 
         <div th:insert="~{front-end/index/index::footer}"></div>
+        <!-- End Preloader -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/popper.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/owl.carousel.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/wow.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/jquery.nav.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/scrolling-nav.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/jquery.easing.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/jquery.counterup.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/waypoints.min.js}"></script>
+        <script th:src="@{/front-end/index/assets/js/main.js}"></script>
         <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.3/jquery.rateit.min.js}"></script>
         </body>
         </html>
