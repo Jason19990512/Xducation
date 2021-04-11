@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${course.getCoursename()}]] - Xducation 陪你成長的學習好夥伴</title>
+
+    <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+    <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+    <!-- Icon -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
+    <!-- Owl carousel -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.theme.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/nivo-lightbox.css}">
+    <!-- Animate -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/animate.css}">
+    <!-- Main Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/main.css}">
+    <!-- Responsive Style -->
+    <link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" th:href="@{/front-end/library/font-awesome/5.15.1/css/all.min.css}">
+
+    <link rel="stylesheet" th:href="@{/front-end/course/css/mainCoursePage.css}">
+</head>
+
+<body>
+
+
+<!-- include 前台頁面的 header -->
+<div th:insert="~{front-end/index/index::nav-header}"></div>
+
+<main>
+    <section id="videoView">
+        <div class="jumbotron">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <!-- 麵包屑 -->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a th:href="@{/course/toCourseSearch}">所有課程</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a th:href="@{/course/toCourseSearch(refCstypeno=${courseType.getCstypeno()})}">[[${courseType.getCstypename()}]]</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    [[${course.getCoursename()}]]
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!-- 課程名稱 -->
+                        <h1 style="color:#0099CC;">[[${course.getCoursename()}]]<span id="nowPlaying"></span></h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 align-self-center">
+                        <!-- 影片播放 -->
+                        <div id="videoContainer">
+                            <video id="coursePlayer" width="100%" height="auto" controls preload="metadata"
+                                  poster="@{/front-end/course/image/videoPoster.png}">
+                                <source src="#" type="video/mp4">
+                                您的瀏覽器未支援此播放系統，建議使用 Chrome 瀏覽器瀏覽網頁
+                            </video>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- 單元選擇欄位 -->
+                        <div>
+                            <h2 style="color:#0099CC;">課程單元清單</h2>
+                        </div>
+                        <div class="list-group" id="videolist">
+
+                            <!-- Button trigger modal -->
+
+                            <!-- 測驗連結 -->
+<!--                            <a class="list-group-item list-group-item-action list-group-item-primary locked"-->
+<!--                               href="#">-->
+<!--                                <h3 style="color:black;"><i class="fas fa-lock"></i> 自我評量 <i class="far fa-arrow-alt-circle-right"></i></h3>-->
+<!--                            </a>-->
+                            <!--測驗 modal -->
+                            <button type="button" class="list-group-item list-group-item-action list-group-item-primary" data-toggle="modal" data-target="#exampleModalCenter"><h3 style="color:#b07e2d;"><i class="fas fa-pen"></i> 自我評量 <i class="far fa-arrow-alt-circle-right"></i></h3></button>
+
+
+
+                                <div th:each="video : ${courseVideoList}">
+                                    <div class="d-flex">
+                                        <a class="list-group-item list-group-item-action list-group-item-primary allowToWatch"
+                                           th:href="@{/video/videoReader(videono=(${video.getVideono()}))}" th:chaptername="${video.getChaptername()}">
+                                            <div class="d-flex">
+                                                <div class="w-75">
+                                                    <h3 style="color:#0099CC;"><i class="fas fa-play"></i> 單元 [[${video.getChapterno()}]]</h3>
+                                                </div>
+                                                <div class="w-25">
+                                                    <p class="showVideoLen text-right"></p>
+                                                    <input type="hidden" th:name="chapterlen" th:value="${video.getChapterlen()}" min=0 step=1 readonly>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5>[[${video.getChaptername()}]]</h5>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row align-items-center text-center courseInfoContainer">
+                    <div class="col-md col-6 courseInfo">
+                        <!-- 須要video中的課程的時間加總 -->
+                        <i class="fas fa-clock"></i>
+                        <p>總長: <span id="courseTtlTime">[[${course.getTtltime() /60}]]分鐘</span></p>
+                    </div>
+                    <div class="col-md col-6 courseInfo">
+                        <!-- 須要查詢評分 -->
+                        <i class="fas fa-star">[[${course.getCsscore() / course.getCsscoretimes() }]]</i>
+                        <p><span>[[${course.getCsscoretimes() }]]</span> 則評價</p>
+                    </div>
+                    <div class="col-md col-6 courseInfo">
+                        <!-- 須要查詢原本單價、類別、優惠活動 -->
+                        <i class="fas fa-dollar-sign">
+                            <sapn id="courseprice">[[
+                                ${course.getCourseprice}]]</sapn>
+                        </i>
+                    </div>
+
+                    <!-- 須要查詢該使用者是否已加入收藏 -->
+<!--                    <div class="col-md col-3 courseInfo">-->
+<!--                        <c:forEach var="TrackingListVO" items="${TrackingListSvc.getOneByMemno(loginMembersVO.memno)}">-->
+<!--                            <c:choose>-->
+<!--                                <c:when test="${ courseVO.courseno eq TrackingListVO.courseno}">-->
+<!--                                    <label class="bookmark"><i class="fa fa-heart" aria-hidden="true">-->
+<!--                                        <input type="hidden" id="courseno" value="${courseVO.courseno}" />-->
+<!--                                    </i></label>-->
+<!--                                    <c:set var="flag" value="true" />-->
+<!--                                </c:when>-->
+<!--                            </c:choose>-->
+<!--                        </c:forEach>-->
+
+<!--                        <c:if test="${empty flag}">-->
+<!--                            <label class="bookmark"><i class="fa fa-heart-o" aria-hidden="true">-->
+<!--                                <input type="hidden" id="courseno" value="${courseVO.courseno}" />-->
+<!--                            </i></label>-->
+<!--                        </c:if>-->
+<!--                        <c:remove var="flag" />-->
+<!--                    </div>-->
+
+                    <!-- 須要查詢該使用者是否已購買 -->
+                    <div class="col-md col-3 courseInfo">
+                        <!-- 是否購買 -->
+                        <!-- 未購買，所以要可以買 -->
+                        <label class="shoppingcart">
+                            <i class="fa fa-shopping-cart" aria-hidden="true">
+                                <input type="hidden" name="courseno" id="courseno" value="${courseVO.courseno}" />
+                                <%-- <input type ="hidden" name="courseprice" id="courseprice" value ="${courseVO.courseprice}"/> --%>
+<!--                            <%-- <input type ="hidden" name="courseinfo"  id="courseinfo"  value ="${courseVO.courseinfo}"/> --%>-->
+                            </i>
+                        </label>
+                         已購買，無法點選
+                        <i class="fas fa-user-check"></i>
+
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+
+            <nav>
+                <ul class="nav nav-pills nav-justified" id="nav-subpage">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#courseinfo">課程簡介</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#coursescope" id="course_assess">課程評價</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#post">問題討論</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="tab-content" id="subpage">
+                <div id="courseinfo" class="tab-pane fade show active">
+                    <div th:utext="${course.getCourseinfo}"></div>
+                </div>
+                <div id="coursescope" class="tab-pane fade">
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+<!-- 測驗單元Modal -->
+<form action='<%= request.getContextPath()%>/question/questionTest.do' method='post' id="myForm">
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">請選擇題型</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+                        <select class="form-control" id="exampleFormControlSelect1" name ="level">
+                            <option value="-1">請選擇考題難易度</option>
+                            <option value="simple">簡單</option>
+                            <option value="medium">中等</option>
+                            <option value="hard">困難</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" id="exampleFormControlSelect2" name ="unit">
+                            <option value="-1">請選擇測驗單元</option>
+<!--                            <c:forEach var="videoVO" items="${videoSvc.getAll(map)}" varStatus="counter">-->
+<!--                                <option value="${counter.count}">單元 ${videoVO.chapterno}</option>-->
+<!--                            </c:forEach>-->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type='hidden' name='courseno' value="${courseVO.courseno}">
+                    <input type="hidden" name="action" value="printPaper">
+                    <button type="button" class="btn btn-info" id="turnin">進入測驗</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- ========== JavaScript Area ========== -->
+<!-- Bootstrap 的 JS (jquery 改為完整版)-->
+<script th:src="@{/library/jquery/jquery-3.5.1.js}"></script>
+<script th:src="@{/library/bootstrap/4.5.3/js/bootstrap.bundle.min.js}"></script>
+<!-- 計算 video durarion 相關的 JS -->
+<script th:src="@{/front-end/video/js/videoDurationCaculation.js}"></script>
+
+<script>
+    $(function () {
+        //送出測驗表單
+        $('#turnin').click(function(){
+            if($('#exampleFormControlSelect1').find('option:selected').val() === '-1'  || $('#exampleFormControlSelect2').find('option:selected').val() === '-1' ){
+                swal('請選擇難易度及單元', '', 'error');
+            }
+            //判斷題庫是否有題目
+            else if('${QuestionBankSvc.getAll(courseVO.courseno).size()}' < 20 ){
+                swal('目前尚無測驗題目', '', 'warning');
+            }else{
+                $('#myForm').submit();
+            }
+        });
+
+        for(let i = 0 ; i < $('.showVideoLen').length ; i ++){
+            let videolen = $('.showVideoLen').eq(i).next().val();
+            let m = parseInt(videolen / 60);
+            let s = videolen - m * 60 ;
+            $('.showVideoLen').eq(i).text( m + ':' + s);
+        }
+
+        // 註冊影片清單點擊事件
+        $("#videolist .allowToWatch").click(function (e) {
+            e.preventDefault();
+            $("#videoContainer video").attr("autoplay", true);
+            $("#videoContainer video source").attr("src", $(this).attr("href"));
+            let videoPlayer = document.getElementById("coursePlayer");
+            videoPlayer.load();
+            $("#nowPlaying").text(" → " + $(this).attr('chaptername'));
+        });
+
+        // 註冊影片清單點擊事件
+        $("#videolist .locked").click(function (e) {
+            e.preventDefault();
+            swal('付費課程', '請先登入或購買課程', 'warning')
+        });
+
+        // 追蹤清單
+        $('body').on('click' , '.bookmark',function(){
+                $.ajax({
+                    url	:"<%=request.getContextPath()%>/tracking_list/tracking_list.do",
+                    data:{
+                        courseno : $(this).find('#courseno').val(),
+                        action   : updateTrackingList ,
+                    },
+                    success: function(data){
+                        console.log('操作成功--->searchPage');
+                    }
+                });
+
+
+        });
+
+        // 購物車
+        $('body').on('click', '.shoppingcart', function () {
+            $.ajax({
+                url: "<%=request.getContextPath()%>/Shop/Shopping_Cart.do",
+                data: {
+                    courseno: $(this).find('#courseno').val(),
+// 						memno:$("#memno").val(),
+                    action: "shoppingCart"
+                },
+                success: function (data) {
+                    if (data !== 'false') {
+                        console.log('加入購物車');
+                        swal('你已將課程加入購物車！！', '', 'success');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<!-- include 前台頁面的 footer -->
+<div th:insert="~{front-end/index/index::footer}"></div>
+
+<script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/popper.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/owl.carousel.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/wow.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.nav.js}"></script>
+<script th:src="@{/front-end/index/assets/js/scrolling-nav.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.easing.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.counterup.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/waypoints.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/main.js}"></script>
+</body>
+
+</html>

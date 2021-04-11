@@ -15,7 +15,12 @@
             <if test="csscore != null">and csscore = #{csscore} </if>
             <if test="searchText != null">and coursename LIKE CONCAT('%',#{searchText},'%') </if>
         </where>
-             <if test="term != null">order by 'courseprice'  </if>
+        <choose>
+             <when test="term == 'courseprice' ">order by courseprice  desc</when>
+             <when test="term == 'ttltime' ">order by ttltime desc </when>
+             <when test="term == 'csscore' ">order by csscore desc </when>
+             <otherwise>order by courlmod  desc</otherwise>
+        </choose>
     </select>
 
     <select id="findCourseByPrimaryKey" resultType="course">

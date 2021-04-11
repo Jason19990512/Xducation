@@ -36,12 +36,77 @@
                 label{
                     height:0;
                 }
-                a.course{
-                    color: rgba(0, 0, 0, 0.65);
-                }
             </style>
+            <script>
 
+
+
+
+                $(document).ready(function(){
+                    if($('#searchTextFromIndex').val()){
+                        $('#searchText').val($('#searchTextFromIndex').val());
+                    }
+                    if($('#refCstypenoFromMainPage').val()){
+                        $('#refcstypeno').val($('#refCstypenoFromMainPage').val());
+                        serachCourse();
+                    }
+                    $("div.rateit, span.rateit").rateit();
+
+                    $('#searchText').keydown(function(){
+                        if(event.keyCode == 13){
+                            searchCourse();
+                        }
+                    });
+
+
+                    $('#turnin').click(function(){
+                        searchCourse();
+                    });
+
+                });
+
+                function serachCourse(){
+                    var request = $.ajax({
+                        method:'post',
+                        url:'/course/searchCourse',
+                        data: $('#searchForm').serialize()
+                    });
+
+                    request.done(function(data){
+                        var JSONarray = JSON.parse(data);
+                        $(".seacharea").empty();
+                        var str = "";
+                        for(let i = 0 ; i < JSONarray.length ; i++){
+                            str +=  `<div class="col-md-6 col-lg-3 col-xs-12">`;
+                            str +=  `<div class="services-item wow fadeInRight" data-wow-delay="0.3s">`;
+                            str +=  `<div class="icon">`;
+                            str +=  `<a href="/course/toCourseMainPage?courseno=`+ JSONarray[i].courseno +`" style="color: rgba(0, 0, 0, 0.65);">`;
+                            str +=  `<img src=  "` + JSONarray[i].courseimg + `"style="max-width:100%;height:150px"></div>`;
+
+                            str +=  `<div class="services-content">`;
+                            str +=  `&nbsp;&nbsp;<div class="rateit" data-rateit-value="` + JSONarray[i].csscore / JSONarray[i].csscoretimes + `" data-rateit-ispreset="true" data-rateit-readonly="true"></div><br>`;
+
+
+                            str +=  `&nbsp;&nbsp;&nbsp;` + JSONarray[i].csscoretimes + `則評價`;
+                            str +=  `<h3 style="font-size:16px;">` + JSONarray[i].coursename + `</h3></a>`;
+
+                            str +=  `<p>課程總長 `+ Math.floor(JSONarray[i].ttltime/60) +` 分鐘</p>`;
+
+                            str +=	`<h5>NT$` + JSONarray[i].courseprice + `</h5></div></div></div>`;
+                        }
+
+                        $(".seacharea").append(str);
+                        $("div.rateit, span.rateit").rateit();
+
+                        $('.services-item .services-content h3 a').css('font-size','22px');
+                        $('.services-item .services-content h3 a').css('color','#333');
+
+                        $('.services-item .services-content h3 a:hover').css('color','#0099CC');
+                    });
+                }
+            </script>
         </head>
+
         <body>
 
 
@@ -57,14 +122,15 @@
                             <label>課程名稱</label>
 
                             <div>
-                                <input class="form-control" type="text" name="searchText"
-                                       placeholder="&nbsp;&nbsp;今天想學什麼呢？" id="searchText" >
+                                <input class="form-control" type="text" name="searchText" placeholder="&nbsp;&nbsp;今天想學什麼呢？" id="searchText" >
+                                <input type="hidden" th:if="${searchText}" th:value="${searchText}" id="searchTextFromIndex">
                             </div>
 
                         </div>
                         <div class="col-2">
                             <label>類別名稱</label>
                             <div>
+                                <input type="hidden" th:if="${refCstypeno}" th:value="${refCstypeno}" id="refCstypenoFromMainPage">
                                 <select class="form-control" id="refcstypeno" name="refcstypeno">
                                         <option value="">請選擇類別</option>
                                         <option th:each="courseType : ${allCourseType}" th:value="${courseType.getCstypeno()}">[[${courseType.getCstypename()}]]</option>
@@ -98,129 +164,30 @@
                         <div class="row seacharea">
                             <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${SearchedCourse}">
                                 <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+                                    <a th:href="@{/course/toCourseMainPage(courseno=${course.getCourseno()}) }" style="color: rgba(0, 0, 0, 0.65);">
                                     <div class="icon">
                                         <img th:src="${course.getCourseimg()}">
                                     </div>
                                     <div class="services-content">
                                         &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.getCsscore() / course.getCsscoretimes() }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                                         &nbsp;[[${course.getCsscoretimes()}]]則評價
-                                        <h3><a href="#">[[${course.getCoursename}]]</a></h3>
+                                        <h3 style="font-size:16px;">[[${course.getCoursename}]]</h3>
                                         <p >課程共[[${course.getTtltime() /60}]]分鐘</p>
                                         <p >同學累計人</p>
                                         <h5>NT$[[${course.getCourseprice()}]]</h5>
                                     </div>
+                                    </a>
                                 </div>
                             </div>
                     </div>
-
-
             </div>
-
             </section>
         </div>
         </div>
 
 
 
-        <script>
-            $(document).ready(function(){
 
-
-
-
-
-
-                $('#searchText').keydown(function(){
-                    if(event.keyCode == 13){
-                        searchCourse();
-                    }
-                });
-
-
-                $('#turnin').click(function(){
-                    searchCourse();
-                });
-
-                function searchCourse(){
-                    $.ajax({
-                        type:"post",
-                        url	:"<%=request.getContextPath()%>/course/coursesearch.do",
-                        data:{
-                            searchText:$('#searchText').val(),
-                            cstypeno:$('#cstypeno').val(),
-                            min:$('#min').val(),
-                            max:$('#max').val(),
-                            order:$('#order').val(),
-                            action:'mutlipleSearch'
-                        },
-                        success: function(data){
-
-                            var JSONarray = JSON.parse(data);
-                            $(".seacharea").empty();
-
-                            var str = "";
-                            for(let i = 0 ; i < JSONarray.length ; i++){
-
-
-
-
-
-// 						str +=  `<div class="col-md-6 col-lg-3 col-xs-12">
-// 		                    <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-// 		                        <div class="icon">
-// 		                            <img src=  "` +  courseimgno    + `"style="width:200px;height:150px">
-// 		                        </div>
-// 		                        <div class="services-content">`;
-
-                                // 顯鈞：替換成新版本讀圖測試2020/10/22
-                            var pictureURL = "<%=request.getContextPath()%>/course/CoursePictureReaderFromDB?courseno=" + JSONarray[i].courseno;
-
-
-                            str +=  `<div class="col-md-6 col-lg-3 col-xs-12">`;
-			            str +=  `<div class="services-item wow fadeInRight" data-wow-delay="0.3s">`;
-			            str +=  `<div class="icon">`
-			            str +=  `<a href="<%=request.getContextPath()%>/course/course.do?action=showCourseMainPage&courseno=` + JSONarray[i].courseno + `" style="color: rgba(0, 0, 0, 0.65);">`
-						// str +=  `<img src=  "` + pictureURL + `"style="width:200px;height:150px"></div>`;
-                                str +=  `<img src=  "` + pictureURL + `"style="max-width:100%;height:150px"></div>`;
-
-                                str +=  `<div class="services-content">`;
-                                str +=  `&nbsp;&nbsp;<div class="rateit" data-rateit-value="` + JSONarray[i].csscore / JSONarray[i].csscoretimes + `" data-rateit-ispreset="true" data-rateit-readonly="true"></div><br>`;
-
-
-                                str +=  `&nbsp;&nbsp;&nbsp;` + JSONarray[i].csscoretimes + `則評價`;
-                                str +=  `<h3 style="line-height:40px;">` + JSONarray[i].coursename + `</h3></a>`;
-
-                                str +=  `<p>課程總長 `+ Math.floor(JSONarray[i].ttltime/60) +` 分鐘</p>`;
-                                str +=	`<label class="shoppingcart"><i class="fa fa-shopping-cart" aria-hidden="true"><input type ="hidden" name="courseno" 	 id="courseno"   value ="`+ JSONarray[i].courseno +`"/></i>加入購物車</label>`;
-
-
-                                str +=	`<label class="bookmark"><i class="` + JSONarray[i].class +`" aria-hidden="true" style="color:red"><input type ="hidden"  id="courseno" value ="`+ JSONarray[i].courseno +`"/></i>加入追蹤</label><hr>`;
-                                str +=	`<h5>NT$` + JSONarray[i].courseprice + `</h5></div></div></div>`;
-
-                            }
-
-                            $(".seacharea").append(str);
-                            $("div.rateit, span.rateit").rateit()
-
-                            $('.services-item .services-content h3 a').css('font-size','22px');
-                            $('.services-item .services-content h3 a').css('color','#333');
-
-                            $('.services-item .services-content h3 a:hover').css('color','#0099CC');
-
-                        }
-                    });
-                };
-
-            });
-
-            function serachCourse(){
-                var request = $.ajax({
-                   method:'post',
-                   url:'/course/searchCourse',
-                   data: $('#searchForm').serialize()
-                });
-            }
-        </script>
 
         <div th:insert="~{front-end/index/index::footer}"></div>
         <!-- End Preloader -->

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.VideoMapper">
+    <select id="getVideoByCondition" resultType="video" parameterType="hashmap">
+        select * from project.video
+        <where>
+            <if test="refcourseno != null">and refcourseno = #{refcourseno} </if>
+            <if test="testscope != null">and testscope = #{testscope} </if>
+            <if test="chapterno != null">and chaptername LIKE CONCAT('%',#{chaptername},'%') </if>
+            <if test="chaptername != null">and chapterno = #{chapterno} </if>
+        </where>
+    </select>
+
+    <select id="getAllVideo" resultType="video">
+        select * from project.video order by video.videono
+    </select>
+    <select id="findVideoByPrimaryKey" resultType="video">
+        select * from project.video where videono = #{videono}
+    </select>
+
+    <insert id="insertVideo" parameterType="video">
+        insert into project.video
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            refcourseno,testscope,chapterno,chaptername,
+            <if test="chapterlen !=null || chapterlen != '' ">
+                chapterlen,
+            </if>
+            <if test="videopath !=null || videopath != '' ">
+                videopath,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            #{refcourseno},#{testscope},#{chapterno},#{chaptername},
+            <if test="chapterlen !=null || chapterlen != '' ">
+                #{chapterlen},
+            </if>
+            <if test="videopath !=null || videopath != '' ">
+                #{videopath},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateVideo" parameterType="video">
+        update project.video
+        <set>
+            <if test="refcourseno != null">refcourseno = #{refcourseno},</if>
+            <if test="testscope != null">testscope = #{testscope},</if>
+            <if test="chapterno != null">chapterno = #{chapterno},</if>
+            <if test="chaptername != null">chaptername = #{chaptername},</if>
+            <if test="chapterlen != null">chapterlen = #{chapterlen},</if>
+            <if test="videopath != null">videopath = #{videopath},</if>
+        </set>
+        where videono = #{videono}
+    </update>
+
+
+</mapper>

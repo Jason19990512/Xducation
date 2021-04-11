@@ -1,0 +1,103 @@
+.table-sortable {
+    position: relative;
+}
+
+.table-sortable .sortable-placeholder {
+    height: 120px;
+}
+
+.table-sortable .sortable-placeholder:after {
+    position: absolute;
+    z-index: 10;
+    content: "";
+    height: 120px;
+    background: #f9f9f9;
+    left: 0;
+    right: 0;
+}
+
+#videolist td {
+    padding: 6px;
+    /* background-color: #A2D9FF; */
+    background-color: rgba(162, 217, 255, 0.3);
+    text-align: left;
+}
+
+#videolist .insertChapterTr td {
+    /* background-color: #A2D9FF; */
+    background-color: rgba(255, 166, 0, 0.3);
+}
+
+.fa-bars {
+    font-size: 20px;
+    cursor: grab;
+
+    /*     cursor: move; fallback if grab cursor is unsupported */
+    /*     cursor: grab; */
+    /*     cursor: -moz-grab; */
+    /*     cursor: -webkit-grab; */
+}
+
+.fa-bars:active {
+    cursor: grabbing;
+
+    /*     cursor: grabbing; */
+    /*     cursor: -moz-grabbing; */
+    /*     cursor: -webkit-grabbing; */
+}
+
+.fa-play-circle {
+    font-size: 32px;
+}
+
+.fas.fa-video-slash {
+    font-size: 20px;
+    color: red;
+}
+
+.fa-plus-square,
+.fa-save {
+    font-size: 50px;
+    color: black;
+    cursor: pointer;
+}
+
+#videolist input[type=number] {
+    width: 45px;
+}
+
+#videolist input[name=chaptername] {
+    
+    font-size: 20px;
+    font-weight: 800;
+}
+
+#videolist input[name=chapterlen] {
+    width: 60px;
+}
+
+#videolist input[type=file] {
+    width: 150px;
+/*     outline-width: initial; */
+}
+
+
+#videolist input[readonly] {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+#videolist input[type=file] {
+    background-color: transparent;
+    outline: none;
+    /*     visibility: hidden; */
+}
+
+#chapterEditRow td:first-child {
+    background-color: rgba(0, 255, 120, 0.3);
+}
+
+#chapterEditRow td:last-child {
+    background-color: #007bff66;
+}

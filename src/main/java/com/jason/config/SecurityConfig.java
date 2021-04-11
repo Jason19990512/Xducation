@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 設定頁面可以被哪一種角色訪問
         // 首頁可以被任何角色訪問 "/" -> 所有的請求
-        http.authorizeRequests().antMatchers("/","/register/**","/log/**","/resources/**").permitAll();
+        http.authorizeRequests().antMatchers("/","/register/**","/log/**","/resources/**","/upload/**").permitAll();
 //                .antMatchers("/level2/**").hasRole("vip2")
 //                .antMatchers("/level3/**").hasRole("vip3");
 

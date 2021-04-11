@@ -171,20 +171,21 @@
                 <!-- Services item1 -->
                 <div class="col-md-6 col-lg-3 col-xs-12" th:each="course : ${bestCourse}" >
                     <div class="services-item wow fadeInRight" data-wow-delay="0.3s" >
+                        <a th:href="@{/course/toCourseMainPage(courseno=${course.getCourseno()}) }" style="color: rgba(0, 0, 0, 0.65);">
                         <div class="icon">
                             <img th:src="${course.getCourseimg()}">
                         </div>
                         <div class="services-content">
                             &nbsp;&nbsp;&nbsp;<div class="rateit" th:value="${course.getCsscore() / course.getCsscoretimes() }" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                             &nbsp;[[${course.getCsscoretimes()}]]則評價
-                            <h3>
-                                <a href="#">[[${course.getCoursename}]]</a>
-                                <h3 th:text="${#strings.length(course.getCoursename) > 8} "></h3>
+                            <h3 style="font-size:16px;">
+                                [[${course.getCoursename}]]
                             </h3>
                             <p >課程共[[${course.getTtltime() /60}]]分鐘</p>
                             <p >同學累計人</p>
                             <h5>NT$[[${course.getCourseprice()}]]</h5>
                         </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -434,9 +435,9 @@
 </body>
 <script>
     $(document).ready(function(){
-
+        $("div.rateit, span.rateit").rateit();
     });
-    $("div.rateit, span.rateit").rateit();
+
 
 </script>
 </html>
