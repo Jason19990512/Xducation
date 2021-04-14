@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.QuestionBankOptionMapper">
+    <select id="findQuestionBankOptionByRefqbankNo" resultType="questionBankOption" parameterType="int">
+        select * from project.questionBankOption where refqbankno  #{refqbankno}
+    </select>
+
+    <insert id="insertQuestionBankOption" parameterType="List">
+        INSERT INTO project.questionBankOption(refqbankno,`option`,quans)
+        values
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+             #{item.refqbankno}, #{item.`option`}, #{item.quans}
+        </foreach>
+    </insert>
+
+    <update id="updateQuestionBankOption" parameterType="questionBankOption">
+        update project.questionBankOption
+        <set>
+            <if test="refqbankno != null">refqbankno = #{refqbankno},</if>
+            <if test="option != null">`option` = #{option}</if>
+            <if test="quans != null">`quans` = #{quans}</if>
+        </set>
+        where qoptionno = #{qoptionno}
+    </update>
+</mapper>

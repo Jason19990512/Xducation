@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.TestMapper">
+    <select id="findTestByCondition" resultType="test" >
+        select * from project.test
+        <where>
+            <if test="testno != null">and testno = #{testno} </if>
+            <if test="refcourseno != null">and refcourseno = #{refcourseno} </if>
+            <if test="refmemno != null">and refmemno = #{refmemno} </if>
+            <if test="testscope != null">and testscope = #{testscope} </if>
+            and finishtime is not null
+        </where>
+           order by finishtime desc
+    </select>
+
+    <insert id="insertTest" parameterType="test">
+        INSERT INTO project.test(refcourseno,refmemno,testscope)
+        values
+            (#{refcourseno}, #{refmemno}, #{testscope})
+    </insert>
+
+    <update id="updateTest" parameterType="test">
+        update project.test
+        <set>
+            <if test="refcourseno != null">refcourseno = #{refcourseno},</if>
+            <if test="refmemno != null">refmemno = #{refmemno},</if>
+            <if test="testscope != null">testscope = #{testscope},</if>
+            <if test="score != null">score = #{score},</if>
+        </set>
+        where testno = #{testno}
+    </update>
+</mapper>

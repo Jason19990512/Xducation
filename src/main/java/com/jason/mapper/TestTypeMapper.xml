@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jason.mapper.TestTypeMapper">
+    <select id="findAllTestType" resultType="testType" >
+        select * from project.testType
+    </select>
+
+    <insert id="insertTestType" parameterType="testType">
+        INSERT INTO project.questionBankOption(refqbankno,`option`,quans)
+        values
+            (#{refqbankno}, #{`option`}, #{quans})
+    </insert>
+
+    <update id="updateTestType" parameterType="testType">
+        update project.testType
+        <set>
+            <if test="testtype != null">testtype = #{testtype},</if>
+            <if test="testdgee != null">testdgee = #{testdgee}</if>
+        </set>
+        where testtypeno = #{testtypeno}
+    </update>
+</mapper>

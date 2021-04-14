@@ -68,7 +68,6 @@
             <if test="csscore != null">csscore = #{csscore},</if>
             <if test="csscoretimes != null">csscoretimes = #{csscoretimes},</if>
             <if test="courseimg != null">courseimg = #{courseimg},</if>
-            courlmod = current_time
         </set>
         where courseno = #{courseno}
     </update>

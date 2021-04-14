@@ -19,7 +19,5 @@ public interface VideoMapper {
 
     public void delete(String videono);
 
-
-
     public List<Video> getVideoByCondition(Map map);
 }
