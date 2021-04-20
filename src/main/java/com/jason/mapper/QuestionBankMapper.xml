@@ -1,19 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jason.mapper.QuestionBankMapper">
-    <select id="findQuestionByConditon" resultType="questionBank" parameterType="hashmap">
-        select * from project.questionBank
+    <select id="findQuestionByConditon" resultMap="BankHasOption" parameterType="hashmap">
+                SELECT o.*, t.testtypeno, t.testtype, t.testdgee, q.qbankno, q.refcourseno, q.reftesttypeno, q.refmemno, q.testscope, q.qustmt FROM question_bank q , question_bank_option o, test_type t
+
         <where>
-            <if test="qbankno != null">and qbankno = #{qbankno} </if>
-            <if test="refcourseno != null">and refcourseno = #{refcourseno} </if>
-            <if test="reftesttypeno != null">and reftesttypeno = #{reftesttypeno} </if>
-            <if test="refmemno != null">and refmemno = #{refmemno} </if>
-            <if test="testscope != null">and testscope = #{testscope} </if>
-            <if test="qustmt != null">and qustmt LIKE CONCAT('%',#{qustmt},'%') </if>
-            <if test="qustatus != null">and qustatus = #{qustatus} </if>
+            q.qbankno = o.refqbankno and q.reftesttypeno = t.testtypeno
+            <if test="qbankno != null"> and q.qbankno = #{qbankno}  </if>
+            <if test="refcourseno != null"> and q.refcourseno = #{refcourseno} </if>
+            <if test="testtypeno != null"> and t.reftesttypeno = #{testtypeno} </if>
+            <if test="refmemno != null"> and q.refmemno = #{refmemno} </if>
+            <if test="testscope != null"> and q.testscope = #{testscope} </if>
+            <if test="qustmt != null"> and q.qustmt LIKE CONCAT('%',#{qustmt},'%') </if>
+            <if test="qustatus != null"> and q.qustatus = #{qustatus} </if>
+
+
+            <choose>
+                <when test="level == 'simple' "> AND q.qbankno IN (SELECT s.qbankno FROM (SELECT * FROM question_bank q, test_type t WHERE q.reftesttypeno = t.testtypeno AND t.testdgee IN ('簡單') ORDER BY RAND() LIMIT 10) s) </when>
+                <when test="level == 'medium' "> AND q.qbankno IN (SELECT s.qbankno FROM (SELECT * FROM question_bank q, test_type t WHERE q.reftesttypeno = t.testtypeno AND t.testdgee IN ('簡單','中等') ORDER BY RAND() LIMIT 10) s) </when>
+                <when test="level == 'hard' "> AND q.qbankno IN (SELECT s.qbankno FROM (SELECT * FROM question_bank q, test_type t WHERE q.reftesttypeno = t.testtypeno AND t.testdgee IN ('簡單','中等','困難') ORDER BY RAND() LIMIT 10) s) </when>
+            </choose>
         </where>
-            order by qbankno desc
+                <if test="level == null">
+                    ORDER BY qbankno DESC
+                </if>
+
     </select>
+
+    <resultMap id="BankHasOption" type="questionBank">
+        <id property="qbankno" column="qbankno"></id>
+        <result property="refcourseno" column="refcourseno"></result>
+        <result property="refmemno" column="refmemno"></result>
+        <result property="testscope" column="testscope"></result>
+        <result property="qustmt" column="qustmt"></result>
+        <association property="testType" javaType="testType" >
+            <id property="testtypeno" column="testtypeno"></id>
+            <result property="testtype" column="testtype"></result>
+            <result property="testdgee" column="testdgee"></result>
+        </association>
+        <collection property="questionBankOptionList" ofType="questionBankOption">
+            <id property="qoptionno" column="qoptionno"></id>
+            <result property="refqbankno" column="refqbankno"></result>
+            <result property="option" column="option"></result>
+            <result property="quans" column="quans"></result>
+        </collection>
+    </resultMap>
+
 
     <insert id="insertQuestion" parameterType="questionBank">
         insert into project.questionBank

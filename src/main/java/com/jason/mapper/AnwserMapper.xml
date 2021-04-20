@@ -2,30 +2,32 @@
 <!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jason.mapper.AnwserMapper">
 
-    <select id="findAnwserListByCondition" resultType="anwser" >
-        select * from project.anwser
+    <select id="findAnwserListByCondition" resultType="answer" >
+        select * from project.answer
         <where>
             <if test="ansno != null">and ansno = #{ansno} </if>
             <if test="reftestno != null">and reftestno = #{reftestno} </if>
             <if test="refqbankno != null">and refqbankno = #{refqbankno} </if>
         </where>
-            order by ansno
+            <if test="ansno != null">
+                order by ansno
+            </if>
     </select>
 
-    <insert id="insertAnwserList" parameterType="List">
-        INSERT INTO project.anwser(reftestno,refqbankno,opoder)
+    <insert id="insertAnwserList" parameterType="list">
+        INSERT INTO project.answer(reftestno,refqbankno,oporder)
         values
-        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
-            #{item.reftestno}, #{item.refqbankno}, #{item.opoder}
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (#{item.reftestno}, #{item.refqbankno}, #{item.oporder})
         </foreach>
     </insert>
 
     <update id="updateAnwserList" parameterType="List">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update project.anwser
+        <foreach collection="list" item="answer" index="index" open="" close="" separator=";">
+            update project.answer
             set
-                studentans = ${item.studentans}
-            where id = ${item.ansno}
+                studentans = #{answer.studentans}
+            where ansno = ${answer.ansno} and refqbankno = #{answer.refqbankno} and reftestno = ${answer.reftestno}
         </foreach>
     </update>
 </mapper>

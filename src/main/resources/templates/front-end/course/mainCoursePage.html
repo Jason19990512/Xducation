@@ -7,8 +7,12 @@
     <title>[[${course.getCoursename()}]] - Xducation 陪你成長的學習好夥伴</title>
 
     <script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
-    <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>    <!-- Bootstrap CSS -->
+    <script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css}" />
+    <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.js}"></script>
     <!-- Icon -->
     <link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
     <!-- Owl carousel -->
@@ -32,7 +36,6 @@
 <body>
 
 
-<!-- include 前台頁面的 header -->
 <div th:insert="~{front-end/index/index::nav-header}"></div>
 
 <main>
@@ -131,8 +134,7 @@
                     <div class="col-md col-6 courseInfo">
                         <!-- 須要查詢原本單價、類別、優惠活動 -->
                         <i class="fas fa-dollar-sign">
-                            <sapn id="courseprice">[[
-                                ${course.getCourseprice}]]</sapn>
+                            <sapn id="courseprice">[[${course.getCourseprice}]]</sapn>
                         </i>
                     </div>
 
@@ -209,7 +211,7 @@
 
 
 <!-- 測驗單元Modal -->
-<form action='<%= request.getContextPath()%>/question/questionTest.do' method='post' id="myForm">
+<form id="myForm">
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -232,18 +234,15 @@
                     </div>
 
                     <div class="form-group">
-                        <select class="form-control" id="exampleFormControlSelect2" name ="unit">
+                        <select class="form-control" id="exampleFormControlSelect2" name ="testscope">
                             <option value="-1">請選擇測驗單元</option>
-<!--                            <c:forEach var="videoVO" items="${videoSvc.getAll(map)}" varStatus="counter">-->
-<!--                                <option value="${counter.count}">單元 ${videoVO.chapterno}</option>-->
-<!--                            </c:forEach>-->
+                            <option th:each="video : ${courseVideoList}" th:value="${video.chapterno}">單元 [[${video.chapterno}]]</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <input type='hidden' name='courseno' value="${courseVO.courseno}">
-                    <input type="hidden" name="action" value="printPaper">
+                    <input th:type="hidden" th:name="refcourseno" th:value="${course.getCourseno()}">
                     <button type="button" class="btn btn-info" id="turnin">進入測驗</button>
                 </div>
             </div>
@@ -266,12 +265,22 @@
             if($('#exampleFormControlSelect1').find('option:selected').val() === '-1'  || $('#exampleFormControlSelect2').find('option:selected').val() === '-1' ){
                 swal('請選擇難易度及單元', '', 'error');
             }
-            //判斷題庫是否有題目
-            else if('${QuestionBankSvc.getAll(courseVO.courseno).size()}' < 20 ){
-                swal('目前尚無測驗題目', '', 'warning');
-            }else{
-                $('#myForm').submit();
-            }
+            $.ajax({
+                type : 'POST',
+                url : '/questionbank/checkquestion',
+                data: $('#myForm').serialize(),
+                success:function(data){
+                    if(data){
+                        $('#myForm').attr('method','POST');
+                        $('#myForm').attr('action','/questionbank/printTestPapper')
+
+                        $('#myForm').submit();
+                    }else {
+                        swal('目前尚無測驗題目', '', 'warning');
+                    }
+                }
+            });
+
         });
 
         for(let i = 0 ; i < $('.showVideoLen').length ; i ++){

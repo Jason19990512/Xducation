@@ -1,4 +1,4 @@
-package com.jason.service;
+package com.jason.service.Impl;
 
 
 import com.jason.mapper.MailForLostPwdMapper;
@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
 import java.sql.Timestamp;
 
 @Service
-public class MailService {
+public class MailServiceImpl {
 
     Logger logger = Logger.getLogger(this.getClass());
 

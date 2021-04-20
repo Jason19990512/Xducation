@@ -1,0 +1,234 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> Xducation 陪你成長的學習好夥伴</title>
+
+	<script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+	<script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/bootstrap.min.css}">
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css}" />
+	<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.js}"></script>
+	<!-- Icon -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/fonts/line-icons.css}">
+	<!-- Owl carousel -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.carousel.min.css}">
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/owl.theme.css}">
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/magnific-popup.css}">
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/nivo-lightbox.css}">
+	<!-- Animate -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/animate.css}">
+	<!-- Main Style -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/main.css}">
+	<!-- Responsive Style -->
+	<link rel="stylesheet" th:href="@{/front-end/index/assets/css/responsive.css}">
+
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" th:href="@{/front-end/library/font-awesome/5.15.1/css/all.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/front-end/test/css/style2.css}">
+<style>
+	.container-fluid{
+		font-family: 'Noto Sans TC', sans-serif;
+	}
+</style>
+</head>
+<body>
+
+<div th:insert="~{front-end/index/index::nav-header}"></div>
+<input th:type="hidden" th:value="${#lists.size(seletedQuestion)}" id="questionSum">
+	
+<form  id='myForm'>
+
+
+<div class="container-fluid" style="margin-top: 90px;">
+
+			
+		<div class="box1" th:each="question,iter : ${seletedQuestion}" >
+			<!-- 	印出題目 -->
+			<div class="question">
+				<span>[[${iter.index + 1}]].</span><h5>[[${question.getQustmt()}]]</h5>
+				<span>
+				
+					
+					<h6>
+						<span th:id="'testDegreeAndType' + ${iter.index + 1}"  style="font-weight: 100;">[[${question.getTestType().getTestdgee()}]]
+						</span>
+						<span th:switch="${question.getTestType().getTesttype()}" >
+  							<p th:case="'text'">填空題</p>
+  							<p th:case="'radio'">單選題</p>
+						    <p th:case="'checkbox'">多選題</p>
+					  </span>
+					</h6>
+				</span>
+			</div>
+			
+			<!-- 	印出單選/多選題 -->
+
+				<ul class="multiple" th:if="${#lists.size(question.getQuestionBankOptionList()) > 2 }" style="margin: 20px 40px;">
+					<label th:each="questionBankOption : ${question.getQuestionBankOptionList()}" style="display: block">
+						<li class="option" ><input th:type="${question.getTestType().getTesttype()}" th:class=" 'class' + ${iter.index + 1}" th:name="${question.getQbankno()}" th:value="${questionBankOption.getOption()}"  /> <span>O </span><span>[[${questionBankOption.getOption()}]]</span></li>
+					</label>
+				</ul>
+
+
+
+		<!-- 	印出填空題 -->
+
+			<ul class="multiple" th:if="${#lists.size(question.getQuestionBankOptionList()) < 2 }">
+				<li style="list-style: none;">
+					<input class="form-control form-control-lg" th:class=" 'class' + ${iter.index + 1}" th:type="${question.getTestType().getTesttype()}" th:name="${question.getQbankno()}" placeholder="請填寫答案"/>
+				</li>
+			</ul>
+
+
+	</div>
+
+	<div style="text-align: center; margin:20px;">
+		<input type="hidden" name="testno" th:value="${testno}">
+		<button type="button" class="btn btn-primary" id="turnin" >提交測驗</button>
+	</div>
+</div>
+</form>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+	crossorigin="anonymous"></script>
+	
+<script type="text/javascript">
+
+
+	
+	$(document).ready(function() {
+		
+		for(let i = 1 ; i <= $('ul.multiple').length ; i++){
+			if($('#testDegreeAndType' + i ).text().indexOf('簡單') > -1){
+				$('#testDegreeAndType' + i ).addClass('badge badge-success');
+				$('#testDegreeAndType' + i ).css('font-weight','0');
+			}else if($('#testDegreeAndType' + i ).text().indexOf('中等') > -1){
+				$('#testDegreeAndType' + i ).addClass('badge badge-warning');
+				$('#testDegreeAndType' + i ).css('font-weight','0');
+			}else if($('#testDegreeAndType' + i ).text().indexOf('困難') > -1){
+				$('#testDegreeAndType' + i ).addClass('badge badge-danger');
+				$('#testDegreeAndType' + i ).css('font-weight','0');
+			}
+		}
+		});
+		
+		
+		
+		
+		
+		
+
+		var str = '/^[\u4e00-\u9fa5_a-zA-Z0-9_]+$/g';//正則表達式，中英文及數字才符合
+		
+		$('input[type=text]').keyup(function(){//正確作答則移除
+			$(this).parents('ul').removeClass('notWritten');
+		});
+		
+		
+		
+		$('input[type=radio]').click(function(){//正確作答則移除
+			
+			var ul = $(this).parents('ul');
+			var liCount = ul.find('li.option').length;	
+		
+			for(let i = 0 ; i < liCount ; i++ ){
+				ul.find('li.option')[i].style.border = '';
+				
+				ul.find('li.option')[i].style.backgroundColor = '';
+			}
+			
+			
+			if($(this).prop('checked')){
+				$(this).parents('li.option').css('border','1px solid #14bdcc');
+				$(this).parents('li.option').css('background-color','rgba(20, 189, 204, .1)');
+			}
+			
+			$(this).parents('ul').removeClass('notWritten');
+		});
+		
+		
+		$('input[type=checkbox]').click(function(){
+			if($(this).prop('checked')){
+				$(this).parents('li.option').css('border','1px solid #14bdcc');
+				$(this).parents('li.option').css('background-color','rgba(20, 189, 204, .1)');
+			}else{
+				$(this).parents('li.option').css('border','');
+				$(this).parents('li.option').css('background-color','');
+			}
+			
+			$(this).parents('ul').removeClass('notWritten');
+			
+		});
+		
+		
+		$('#turnin').click(function(e) {//全部題目做完繳交判定
+			e.preventDefault();
+			var questionSum = $('#questionSum').val();
+;			for(let j = 1 ; j <= questionSum ; j++){
+				
+				var s ;
+				
+				if($('input[class=class'+ j +']').length > 0){
+					 s = $('input[class=class'+ j +']');
+				}else{
+					 s = $('#class'+j);
+				}
+				
+				var count = 0 ;
+				if(s.length === 4){//單選/多選題
+					for(let i = 0; i < s.length ;i++){
+						if(s[i].checked){
+							count++;
+						}
+					}
+				}
+				else if($('.class'+j).val().trim().length!=0 && $('.class'+j).val().trim().search(str)){//填空題
+						count++;
+				}
+				if(count == 0){//沒有勾選或填寫的選項的ul加上標註
+					s.parents('ul').addClass('notWritten');
+				}
+			}
+			
+			console.log($('.notWritten').length);
+			
+			if($('.notWritten').length <=0){//判斷是否沒有標註再交卷
+				swal('你已完成測驗！', '', 'success').then(function(){
+					$('#myForm').attr('method','POST');
+					$('#myForm').attr('action','/questionbank/correctTestPapper');
+					$('#myForm').submit();
+				});
+				    	
+			}else{
+				swal('你尚未完成測驗！', '', 'warning');
+			}
+		});
+		
+
+</script>
+
+<div th:insert="~{front-end/index/index::footer}"></div>
+<script th:src="@{/front-end/index/assets/js/jquery-min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/popper.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/owl.carousel.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/wow.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.nav.js}"></script>
+<script th:src="@{/front-end/index/assets/js/scrolling-nav.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.easing.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/jquery.counterup.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/waypoints.min.js}"></script>
+<script th:src="@{/front-end/index/assets/js/main.js}"></script>
+</body>
+</body>
+
+
+</html>

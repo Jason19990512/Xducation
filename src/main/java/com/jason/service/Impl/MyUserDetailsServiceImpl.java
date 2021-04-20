@@ -1,4 +1,4 @@
-package com.jason.service;
+package com.jason.service.Impl;
 
 import com.jason.mapper.MemberMapper;
 import com.jason.pojo.Members;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     MemberMapper memberMapper;

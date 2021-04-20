@@ -1,6 +1,6 @@
 package com.jason.config;
 
-import com.jason.service.MyUserDetailsService;
+import com.jason.service.Impl.MyUserDetailsServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    MyUserDetailsService myUserDetailsService;
+    MyUserDetailsServiceImpl myUserDetailsService;
 
     Logger logger = Logger.getLogger(this.getClass());
 

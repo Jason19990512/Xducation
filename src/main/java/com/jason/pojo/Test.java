@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class Test implements java.io.Serializable{
     private Integer testno;
     private Integer refcourseno;
-    private Integer refmemno;
+    private String refmemacc;
     private Integer testscope;
     private Integer score;
     private Timestamp testtime ;

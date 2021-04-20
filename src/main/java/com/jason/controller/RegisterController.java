@@ -1,16 +1,13 @@
 package com.jason.controller;
 
-import com.jason.config.SecurityConfig;
 import com.jason.mapper.MailForLostPwdMapper;
 import com.jason.mapper.MemberMapper;
 import com.jason.pojo.MailForLostPwd;
 import com.jason.pojo.Members;
-import com.jason.service.MailService;
+import com.jason.service.Impl.MailServiceImpl;
 import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,8 +23,6 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/register")
@@ -41,7 +36,7 @@ public class RegisterController extends IndexController{
     MailForLostPwdMapper mailForLostPwdMapper;
 
     @Autowired
-    MailService mailService;
+    MailServiceImpl mailService;
 
 
 

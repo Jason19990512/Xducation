@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Anwser implements java.io.Serializable{
+public class Answer implements java.io.Serializable{
     private Integer ansno;
     private Integer reftestno;
     private Integer refqbankno;
-    private String  opoder;
+    private String  oporder;
     private String  studentans;
 }

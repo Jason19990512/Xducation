@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/course")
-public class CourseController {
+public class CourseController extends IndexController{
 
     Logger logger = Logger.getLogger(this.getClass());
 
@@ -64,9 +64,11 @@ public class CourseController {
         HashMap<String ,Object>  map = new HashMap<>();
         if(!StringUtils.isEmpty(courseGrid.getSearchText())){
             map.put("searchText",courseGrid.getSearchText());
-        }else if(!StringUtils.isEmpty(courseGrid.getRefcstypeno())){
+        }
+        if(!StringUtils.isEmpty(courseGrid.getRefcstypeno())){
             map.put("refcstypeno",courseGrid.getRefcstypeno());
-        }else if (!StringUtils.isEmpty(courseGrid.getOrder())){
+        }
+        if (!StringUtils.isEmpty(courseGrid.getOrder())){
 
             map.put("term",courseGrid.getOrder());
         }
