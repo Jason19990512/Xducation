@@ -3,16 +3,17 @@
 <mapper namespace="com.jason.mapper.AnwserMapper">
 
     <select id="findAnwserListByCondition" resultType="answer" >
-        select * from project.answer
-        <where>
-            <if test="ansno != null">and ansno = #{ansno} </if>
-            <if test="reftestno != null">and reftestno = #{reftestno} </if>
-            <if test="refqbankno != null">and refqbankno = #{refqbankno} </if>
-        </where>
-            <if test="ansno != null">
-                order by ansno
-            </if>
-    </select>
+    select * from project.answer
+    <where>
+        <if test="ansno != null">and ansno = #{ansno} </if>
+        <if test="reftestno != null">and reftestno = #{reftestno} </if>
+        <if test="refqbankno != null">and refqbankno = #{refqbankno} </if>
+    </where>
+    <if test="ansno != null">
+        order by ansno
+    </if>
+</select>
+
 
     <insert id="insertAnwserList" parameterType="list">
         INSERT INTO project.answer(reftestno,refqbankno,oporder)

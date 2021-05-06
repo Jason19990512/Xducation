@@ -12,10 +12,7 @@ import com.jason.service.QuestionBankService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +29,9 @@ public class QuestionBankServiceImpl implements QuestionBankService {
 
     @Autowired
     QuestionBankOptionMapper questionBankOptionMapper;
+
+    @Autowired
+    TestMapper testMapper;
 
     @Override
     public boolean checkQuestionSum(String refcourseno, String testscope) {
@@ -92,29 +92,84 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         return seletedQuestion;
     }
 
-    public void  correctTestPapper(HttpServletRequest request, String testno){
+    public void  correctTestPapper(HttpServletRequest request, String memacc){
+
+        String testno = request.getParameter("testno");
+        String refcourseno = request.getParameter("refcourseno");
+
         Enumeration<String> enums = request.getParameterNames();
-//        List<Answer> answerList = new ArrayList<>();
         Map map = new HashMap();
         map.put("reftestno", testno);
         List<Answer> anwserList = anwserMapper.findAnwserListByCondition(map);
 
-        int j = 0;
-        while (enums.hasMoreElements()) {
-            String name = (String) enums.nextElement();
 
-            if("testno".equals(name)){
-                continue;
+        try{
+            int j = 0;
+            while (enums.hasMoreElements()) {
+                String name = (String) enums.nextElement();
+                if( "testno".equals(name) || "refcourseno".equals(name) ){
+                    continue;
+                }
+
+                Answer ans = anwserList.get(j);
+                String value = request.getParameter(name);
+
+                ans.setStudentans(value);
+                j++;
             }
 
-            Answer ans = anwserList.get(j);
-            String value = request.getParameter(name);
-
-            logger.info(value);
-            ans.setStudentans(value);
-            j++;
+            anwserMapper.updateAnwserList(anwserList);
+        }catch (Exception e){
+            logger.debug("answer put error : " + e );
         }
-        anwserMapper.updateAnwserList(anwserList);
+        try{
+            Test test = new Test();
+            test.setTestno(Integer.parseInt(testno));
+            test.setRefcourseno(Integer.parseInt(refcourseno));
+            test.setRefmemacc(memacc);
+
+            testMapper.updateTest(test);
+        }catch(Exception e){
+            logger.debug("answer correct error : " + e );
+        }
+
+    }
+
+    @Override
+    public List<QuestionBank> getTestResult(HttpServletRequest request) {
+        String testno = request.getParameter("testno");
+
+        Map map = new HashMap();
+        map.put("testno",testno);
+        map.put("review","review");
+        map.put("reftestno",testno);
+
+        List<QuestionBank> seletedQuestion = questionBankMapper.findQuestionByConditon(map);
+
+        List<Answer> anwserList = anwserMapper.findAnwserListByCondition(map);
+
+        int i = 0 ;
+        for (QuestionBank questionBank : seletedQuestion) {
+            List<QuestionBankOption> questionBankOptionList = questionBank.getQuestionBankOptionList();
+
+            List<QuestionBankOption> orderedQuestionBankOptionList = new ArrayList<>();
+
+
+            if(questionBankOptionList.size() > 2 ){
+                String oporderData = anwserList.get(i).getOporder();
+                String[] oporder = oporderData.split("");
+                for (String s : oporder) {
+                    int num = Integer.parseInt(s);
+                    orderedQuestionBankOptionList.add(questionBankOptionList.get(num));
+                }
+            }
+
+            questionBank.setQuestionBankOptionList(orderedQuestionBankOptionList);
+            i++;
+
+        }
+
+        return seletedQuestion;
     }
 
 }

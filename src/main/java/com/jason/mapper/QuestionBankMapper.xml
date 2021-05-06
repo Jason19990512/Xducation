@@ -3,10 +3,8 @@
 <mapper namespace="com.jason.mapper.QuestionBankMapper">
     <select id="findQuestionByConditon" resultMap="BankHasOption" parameterType="hashmap">
                 SELECT o.*, t.testtypeno, t.testtype, t.testdgee, q.qbankno, q.refcourseno, q.reftesttypeno, q.refmemno, q.testscope, q.qustmt FROM question_bank q , question_bank_option o, test_type t
-
         <where>
             q.qbankno = o.refqbankno and q.reftesttypeno = t.testtypeno
-            <if test="qbankno != null"> and q.qbankno = #{qbankno}  </if>
             <if test="refcourseno != null"> and q.refcourseno = #{refcourseno} </if>
             <if test="testtypeno != null"> and t.reftesttypeno = #{testtypeno} </if>
             <if test="refmemno != null"> and q.refmemno = #{refmemno} </if>
@@ -14,6 +12,12 @@
             <if test="qustmt != null"> and q.qustmt LIKE CONCAT('%',#{qustmt},'%') </if>
             <if test="qustatus != null"> and q.qustatus = #{qustatus} </if>
 
+            <choose>
+                <when test="review != null">
+                    AND q.qbankno IN ( SELECT REFQBANKNO FROM answer WHERE REFTESTNO = #{testno})
+                </when>
+                <when test="qbankno != null"> and q.qbankno = #{qbankno}</when>
+            </choose>
 
             <choose>
                 <when test="level == 'simple' "> AND q.qbankno IN (SELECT s.qbankno FROM (SELECT * FROM question_bank q, test_type t WHERE q.reftesttypeno = t.testtypeno AND t.testdgee IN ('簡單') ORDER BY RAND() LIMIT 10) s) </when>
@@ -21,9 +25,15 @@
                 <when test="level == 'hard' "> AND q.qbankno IN (SELECT s.qbankno FROM (SELECT * FROM question_bank q, test_type t WHERE q.reftesttypeno = t.testtypeno AND t.testdgee IN ('簡單','中等','困難') ORDER BY RAND() LIMIT 10) s) </when>
             </choose>
         </where>
-                <if test="level == null">
+            <choose>
+                <when test="level != null and review != null">
                     ORDER BY qbankno DESC
-                </if>
+                </when>
+                <otherwise>
+                    ORDER BY t.testtypeno
+                </otherwise>
+            </choose>
+
 
     </select>
 

@@ -24,12 +24,10 @@
 
     <update id="updateTest" parameterType="test">
         update project.test
-        <set>
-            <if test="refcourseno != null">refcourseno = #{refcourseno},</if>
-            <if test="refmemno != null">refmemno = #{refmemno},</if>
-            <if test="testscope != null">testscope = #{testscope},</if>
-            <if test="score != null">score = #{score},</if>
-        </set>
-        where testno = #{testno}
+        SET SCORE =
+                        (SELECT COUNT(*) * 10 score FROM answer a
+                         LEFT JOIN question_bank_option qbo ON qbo.REFQBANKNO = a.REFQBANKNO
+                         WHERE qbo.QUANS = a.STUDENTANS AND a.REFTESTNO = #{testno})
+        WHERE TESTNO = #{testno} AND REFCOURSENO = #{refcourseno} AND REFMEMACC = #{refmemacc}
     </update>
 </mapper>

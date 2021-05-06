@@ -13,4 +13,6 @@ public interface AnwserMapper {
     List<Answer> findAnwserListByCondition(Map map);
 
     void updateAnwserList(List<Answer> anwserAllList);
+
+    void countScore(String refTestNo);
 }
